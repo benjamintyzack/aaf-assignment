@@ -44,8 +44,11 @@ db.mongoose.connect(db.url, {
     process.exit();
 });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/bookstore', indexRouter);
+app.use('/bookstore', usersRouter);
+//routes for authentication
+require('./routes/auth')(app);
+require('./routes/test.routes.js')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

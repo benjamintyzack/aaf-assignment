@@ -9,17 +9,20 @@ module.exports = mongoose => {
                 unique: true
             },
             password: {
-                type: String,
-                required: true
-            },
-            role: {
-                type: String,
-                required: true
+                type: String
             },
             dateCreated:{
                 type: Date,
                 required: true,
                 default: Date.now  
+            },
+            isEmployee: {
+                type: Boolean,
+                default: false
+            },
+            isAdmin: {
+                type: Boolean,
+                default: false
             }
         
         })
