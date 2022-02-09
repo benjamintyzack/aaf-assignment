@@ -2,11 +2,11 @@
   <div id="app">
     <nav class="navbar navbar-expand navbar-dark bg-dark">
       <router-link to="/" class="navbar-brand">Bookstore</router-link>
-      <div class="navbar-nav mr-auto">
-        <li class="nav-item">
+      <div v-if="currentUser" class="navbar-nav mr-auto">
+        <li v-if="isAdmin" class="nav-item">
           <router-link to="/users" class="nav-link">List Users</router-link>
         </li>
-        <li class="nav-item">
+        <li v-if="isAdmin" class="nav-item">
           <router-link to="/add-users" class="nav-link">Add Users</router-link>
         </li>
         <li class="nav-item">
@@ -59,7 +59,13 @@ export default {
     },
     protectedContent() {
       return (this.currentUser?true:false);
-    }
+    },
+    isEmployee() {
+      return (this.currentUser.isEmployee?true:false);
+    },
+    isAdmin() {
+      return (this.currentUser.isAdmin?true:false);
+    },
   },
   methods: {
     logOut() {

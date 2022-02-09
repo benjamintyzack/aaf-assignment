@@ -17,13 +17,13 @@ router.get("/users/", userController.findAll);
 // Retrieve a single user with id
 router.get("/users/:id", userController.findOne);
  
-// // Update a user with id
-// router.put("/users/:id", userController.update);
+// Update a user with id
+router.put("/users/:id", userController.update);
  
-// // Delete a user with id
-// router.delete("/users/:id", userController.delete);
+// Delete a user with id
+router.delete("/users/:id", userController.delete);
  
-// // Delete all users of the database
-// router.delete("/users/", userController.deleteAll);
+// Delete all users of the database
+router.delete("/users/", userController.deleteAll);
  
 module.exports = router;

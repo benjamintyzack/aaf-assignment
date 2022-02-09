@@ -11,6 +11,7 @@ var cors = require('cors');
 // Adding routers
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var requestsRouter = require('./routes/requests');
 
 var app = express();
 
@@ -46,6 +47,7 @@ db.mongoose.connect(db.url, {
 
 app.use('/bookstore', indexRouter);
 app.use('/bookstore', usersRouter);
+app.use('/bookstore', requestsRouter);
 //routes for authentication
 require('./routes/auth')(app);
 require('./routes/test.routes.js')(app);
