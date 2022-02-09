@@ -1,3 +1,3 @@
 module.exports = {
-    url: "mongodb+srv://admin:admin@bookshopcluster.xqmhf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    url: "mongodb://localhost:27017/bookstore"
 };
