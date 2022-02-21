@@ -22,7 +22,8 @@ module.exports = mongoose => {
                 type: String
             },
             employeeAssignedID: {
-                type: String
+                type: String,
+                default: ""
             },
             dateCreated:{
                 type: Date,

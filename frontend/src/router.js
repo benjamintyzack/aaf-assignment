@@ -50,6 +50,11 @@ const router = new Router({
             path: '/protectedcontent',
             name: 'protectedcontent',
             component: () => import('./components/ProtectedContent.vue')
+        },
+        {
+            path: '/add-requests',
+            name: 'add-requests',
+            component: () => import("./components/RequestAdd.vue")
         }
     ]
 });
