@@ -9,6 +9,8 @@ router.post("/requests/", requestController.create);
 
 // Retrieve all requests
 router.get("/requests/", requestController.findAll);
+
+router.put("/requests/:id/allocate", requestController.allocate);
  
 // // Retrieve a single requests with id
 // router.get("/requests/:id", requestController.findOne);

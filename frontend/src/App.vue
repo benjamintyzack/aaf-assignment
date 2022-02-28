@@ -9,6 +9,9 @@
         <li v-if="isAdmin" class="nav-item">
           <router-link to="/add-users" class="nav-link">Add Users</router-link>
         </li>
+        <li v-if="isEmployee" class="nav-item">
+          <router-link to="/requests" class="nav-link">List Users</router-link>
+        </li>
         <li class="nav-item">
           <router-link to="/public" class="nav-link">
             <font-awesome-icon icon="home" />Public

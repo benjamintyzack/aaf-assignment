@@ -53,3 +53,29 @@ exports.findAll = (req, res) => {
             });
         });
 };
+
+// Allocate Request to current Employee
+exports.allocate = (req, res) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Data to update can not be empty!"
+        });
+    }
+
+    const id = req.params.id;
+
+    Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update User with id=${id}. Maybe Request was not found!`
+                });
+            } else
+                res.send({ message: "Request was Allocated Successfully." });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error allocating Request with id=" + id
+            });
+        });
+};

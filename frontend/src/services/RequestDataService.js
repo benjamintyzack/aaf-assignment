@@ -12,6 +12,9 @@ class RequestDataService {
         return http.get("/requests");
     }
 
+    allocate(id, data) {
+        return http.put(`/requests/${id}/allocate`, data);
+    }
 
 }
 export default new RequestDataService();

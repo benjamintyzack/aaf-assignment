@@ -55,6 +55,11 @@ const router = new Router({
             path: '/add-requests',
             name: 'add-requests',
             component: () => import("./components/RequestAdd.vue")
+        },
+        {
+            path: '/requests',
+            name: 'requests',
+            component: () => import("./components/RequestList.vue")
         }
     ]
 });
