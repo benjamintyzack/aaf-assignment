@@ -25,7 +25,9 @@ class AuthService {
     register(user) {
         return axios.post(API_URL + 'signup', {
             username: user.username,
-            password: user.password
+            password: user.password,
+            isEmployee: user.isEmployee,
+            isAdmin: user.isAdmin
         });
     }
 }

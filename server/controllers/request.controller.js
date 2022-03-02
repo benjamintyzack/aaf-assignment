@@ -54,6 +54,24 @@ exports.findAll = (req, res) => {
         });
 };
 
+// Retrieve all Requests for a User.
+exports.usersRequests = (req, res) => {
+    const requestedUserID = req.params.id;
+    //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
+    var condition = requestedUserID ? { requestedUserID: { $regex: new RegExp(requestedUserID), $options: "i" } } : {};
+    Request
+        .find(condition)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send( {
+                message: 
+                    err.message || "Some error occurred while retrieving Requests."
+            });
+        });
+};
+
 // Allocate Request to current Employee
 exports.allocate = (req, res) => {
     if (!req.body) {
@@ -68,7 +86,7 @@ exports.allocate = (req, res) => {
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot update User with id=${id}. Maybe Request was not found!`
+                    message: `Cannot update Request with id=${id}. Maybe Request was not found!`
                 });
             } else
                 res.send({ message: "Request was Allocated Successfully." });

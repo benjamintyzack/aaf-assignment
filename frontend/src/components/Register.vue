@@ -31,6 +31,22 @@
                 class="form-control"
                 name="password"
             />
+            <label for="employee">Make Employee</label>
+            <input
+                v-model="user.isEmployee"
+                type="checkbox"
+                name="employee"
+                id="employee"
+                @click="disableAdmin"
+            />
+            <label for="admin">Make Admin</label>
+            <input
+                v-model="user.isAdmin"
+                type="checkbox"
+                name="admin"
+                id="admin"
+                @click="disableEmployee"
+            />
             <div
                 v-if="submitted && errors.has('password')"
                 class="alert-danger"
@@ -52,13 +68,18 @@
 </template>
 
 <script>
-import User from '../models/user';
+// import User from '../models/user';
 
 export default {
   name: 'Register',
   data() {
     return {
-      user: new User('', ''),
+      user: {
+        username: '',
+        password: '',
+        isEmployee: false,
+        isAdmin: false
+      },
       submitted: false,
       successful: false,
       message: ''
@@ -95,6 +116,28 @@ export default {
           );
         }
       });
+    },
+    disableEmployee() {
+        var employeeCheck = document.getElementById("employee");
+        var adminCheck = document.getElementById("admin");
+
+        if (adminCheck.checked) {
+          employeeCheck.disabled = true;
+        }
+        else {
+          employeeCheck.disabled = false;
+        }
+    },
+    disableAdmin() {
+        var employeeCheck = document.getElementById("employee");
+        var adminCheck = document.getElementById("admin");
+
+        if (employeeCheck.checked) {
+          adminCheck.disabled = true;
+        }
+        else {
+          adminCheck.disabled = false;
+        }
     }
   }
 };

@@ -3,26 +3,33 @@
     <nav class="navbar navbar-expand navbar-dark bg-dark">
       <router-link to="/" class="navbar-brand">Bookstore</router-link>
       <div v-if="currentUser" class="navbar-nav mr-auto">
-        <li v-if="isAdmin" class="nav-item">
-          <router-link to="/users" class="nav-link">List Users</router-link>
-        </li>
-        <li v-if="isAdmin" class="nav-item">
-          <router-link to="/add-users" class="nav-link">Add Users</router-link>
-        </li>
-        <li v-if="isEmployee" class="nav-item">
-          <router-link to="/requests" class="nav-link">List Users</router-link>
-        </li>
         <li class="nav-item">
           <router-link to="/public" class="nav-link">
             <font-awesome-icon icon="home" />Public
           </router-link>
         </li>
+        <div v-if="isAdmin" class="navbar-nav mr-auto">
+          <li class="nav-item">
+          <router-link to="/users" class="nav-link">List Users</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/add-users" class="nav-link">Add Users</router-link>
+        </li>
+        </div>
+        <li v-if="isEmployee" class="nav-item">
+          <router-link to="/requests" class="nav-link">Request List</router-link>
+        </li>
         <li v-if="protectedContent" class="nav-item">
           <router-link to="/protectedcontent" class="nav-link">Protected</router-link>
         </li>
-        <li class="nav-item">
-            <router-link to="/add-requests" class="nav-link">Add Request</router-link>
-        </li>
+        <div v-if="!isAdmin && !isEmployee" class="navbar-nav mr-auto">
+          <li class="nav-item">
+              <router-link to="/add-requests" class="nav-link">Add Request</router-link>
+          </li>
+          <li class="nav-item">
+              <router-link to="/users-requests" class="nav-link">My Requests</router-link>
+          </li>
+        </div>
       </div>
       <div v-if="!currentUser" class="navbar-nav ml-auto">
         <li class="nav-item">

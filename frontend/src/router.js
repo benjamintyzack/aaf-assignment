@@ -60,6 +60,11 @@ const router = new Router({
             path: '/requests',
             name: 'requests',
             component: () => import("./components/RequestList.vue")
+        },
+        {
+            path: '/users-requests',
+            name: 'users-requests',
+            component: () => import("./components/UsersRequests.vue")
         }
     ]
 });

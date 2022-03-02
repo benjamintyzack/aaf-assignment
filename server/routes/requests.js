@@ -12,8 +12,8 @@ router.get("/requests/", requestController.findAll);
 
 router.put("/requests/:id/allocate", requestController.allocate);
  
-// // Retrieve a single requests with id
-// router.get("/requests/:id", requestController.findOne);
+// Retrieve requests for current user
+router.get("/requests/:id", requestController.usersRequests);
  
 // // Update a requests with id
 // router.put("/requests/:id", requestController.update);

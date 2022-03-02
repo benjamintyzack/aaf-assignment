@@ -76,6 +76,7 @@ export default {
         bookPrice: this.request.bookPrice,
         bookAuthor: this.request.bookAuthor,
         bookDescription: this.request.bookDescription,
+        bookGenre: this.bookGenre,
         requestedUserID: this.currentUser.id
       };
 

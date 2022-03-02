@@ -32,7 +32,7 @@ module.exports = mongoose => {
             },
             requestStatus: {
                 type: String,
-                enum : ['QUEUED', 'PROCESSING', 'APPROVED', 'DECLINED'],
+                enum : ['QUEUED', 'PROCESSING', 'APPROVED', 'DECLINED', 'CANCELLED', 'SUSPENDED'],
                 default : 'QUEUED'
             },
             isAssigned: {

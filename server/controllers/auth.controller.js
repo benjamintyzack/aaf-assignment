@@ -8,7 +8,9 @@ var bcrypt = require("bcryptjs");
 exports.signup = (req, res) => {
   const user = new User({
     username: req.body.username,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
+    isEmployee: req.body.isEmployee,
+    isAdmin: req.body.isAdmin
   });
 
   user
@@ -55,7 +57,9 @@ exports.signin = (req, res) => {
 
       res.status(200).send({
         id: user._id,
-        username: user.username,        
+        username: user.username,
+        isEmployee: user.isEmployee,
+        isAdmin: user.isAdmin,        
         accessToken: token
       });
     });
