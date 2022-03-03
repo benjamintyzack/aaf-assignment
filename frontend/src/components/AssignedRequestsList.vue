@@ -39,8 +39,11 @@
           <label><strong>Requested User ID:</strong></label> {{ selectedRequest.requestedUserID }}
         </div>
         <div>
-            <button v-if="!checkStatus(selectedRequest)" class="btn btn-success" @click="allocateRequest(selectedRequest)">
-                Allocate Request
+            <button class="btn btn-success" v-if="!needsApproval(selectedRequest) && calculateTotalCost(selectedRequest)" @click="requestApproval(selectedRequest)">
+                Request Authorisation
+            </button>
+            <button class="btn btn-success">
+                Request more detail
             </button>
             <button class="m-3 btn btn-sm btn-danger">
                 Decline Request
@@ -75,8 +78,8 @@ export default {
   },
 
   methods: {
-    retrieveRequests() {
-      RequestDataService.getUnassignedRequests()
+    retrieveAssignedRequests() {
+      RequestDataService.getAssignedRequests(this.currentUser.id)
           .then(response => {
             this.requests = response.data;
             console.log(response.data);
@@ -87,7 +90,7 @@ export default {
     },
 
     refreshList() {
-      this.retrieveRequests();
+      this.retrieveAssignedRequests();
       this.selectedRequest = null;
       this.currentIndex = -1;
     },
@@ -97,28 +100,41 @@ export default {
       this.currentIndex = index;
     },
 
-    checkStatus(request) {
-        return (request.isAssigned?true:false);
+    calculateTotalCost(request) {
+      if(parseInt(request.bookPrice) >= 20) {
+        return true;
+      }
+      else {
+        return false;
+      }
     },
 
-    allocateRequest(request) {
-        this.requestToUpdate = request;
-        this.requestToUpdate.requestStatus = "PROCESSING";
-        this.requestToUpdate.isAssigned = true;
-        this.requestToUpdate.employeeAssignedID = this.currentUser.id;
-
-        RequestDataService.allocate(this.requestToUpdate._id, this.requestToUpdate)
-        .then(response => {
-            console.log(response.data);
-            this.$router.push({ name: "requests" });
-          })
-          .catch(e => {
-            console.log(e);
-          });
+    needsApproval(request) {
+        return (request.needsApproval?true:false);
     },
+
+    needsMoreDetail(request) {
+        return (request.needsMoreDetail?true:false);
+    },
+
+    requestApproval(request) {
+      this.requestToUpdate = request;
+      this.requestToUpdate.requestStatus = "NEEDS APPROVAL";
+      this.requestToUpdate.needsApproval = true;
+
+      RequestDataService.requestApproval(this.requestToUpdate._id, this.requestToUpdate)
+      .then(response => {
+          console.log(response.data);
+          this.$router.push({ name: "assigned-requests" });
+        })
+        .catch(e => {
+          console.log(e);
+        });
+
+    }
   },
   mounted() {
-    this.retrieveRequests();
+    this.retrieveAssignedRequests();
   }
 };
 </script>

@@ -72,6 +72,58 @@ exports.usersRequests = (req, res) => {
         });
 };
 
+// Retrieve all Requests that are assigned to the current user.
+exports.getAssignedRequests = (req, res) => {
+    const employeeAssignedID = req.params.id;
+    //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
+    var condition = employeeAssignedID ? { employeeAssignedID: { $regex: new RegExp(employeeAssignedID), $options: "i" } } : {};
+    Request
+        .find(condition)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send( {
+                message: 
+                    err.message || "Some error occurred while retrieving Requests."
+            });
+        });
+};
+
+// Retrieve all Requests that are unassigned.
+exports.getUnassignedRequests = (req, res) => {
+    //Query to get all the unassigned requests
+    var condition = { isAssigned : false };
+    Request
+        .find(condition)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send( {
+                message: 
+                    err.message || "Some error occurred while retrieving Requests."
+            });
+        });
+};
+
+// Retrieve all Requests that need to be approved.
+exports.getRequestsToApprove = (req, res) => {
+    //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
+    var condition = { needsApproval : true };
+    Request
+        .find(condition)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send( {
+                message: 
+                    err.message || "Some error occurred while retrieving Requests."
+            });
+        });
+};
+
 // Allocate Request to current Employee
 exports.allocate = (req, res) => {
     if (!req.body) {
@@ -94,6 +146,84 @@ exports.allocate = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: "Error allocating Request with id=" + id
+            });
+        });
+};
+
+// Request Approval for a request that is over the cost threshold
+exports.requestApproval = (req, res) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Data to update can not be empty!"
+        });
+    }
+
+    const id = req.params.id;
+
+    Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update Request with id=${id}. Maybe Request was not found!`
+                });
+            } else
+                res.send({ message: "Request Successfull, waiting for Approval" });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error requesting authorisation for Request with id=" + id
+            });
+        });
+};
+
+// approve a purchase request
+exports.approvePurchase = (req, res) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Data to update can not be empty!"
+        });
+    }
+
+    const id = req.params.id;
+
+    Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update Request with id=${id}. Maybe Request was not found!`
+                });
+            } else
+                res.send({ message: "Authorisation requested Successfully." });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error requesting authorisation for Request with id=" + id
+            });
+        });
+};
+
+// decline a purchase request
+exports.declinePurchase = (req, res) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Data to update can not be empty!"
+        });
+    }
+
+    const id = req.params.id;
+
+    Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot decline Request with id=${id}. Maybe Request was not found!`
+                });
+            } else
+                res.send({ message: "Request Declined." });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error declining for Request with id=" + id
             });
         });
 };

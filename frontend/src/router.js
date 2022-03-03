@@ -65,6 +65,16 @@ const router = new Router({
             path: '/users-requests',
             name: 'users-requests',
             component: () => import("./components/UsersRequests.vue")
+        },
+        {
+            path: '/assigned-requests',
+            name: 'assigned-requests',
+            component: () => import("./components/AssignedRequestsList.vue")
+        },
+        {
+            path: '/approve-requests',
+            name: 'approve-requests',
+            component: () => import("./components/ApprovalList.vue")
         }
     ]
 });

@@ -30,9 +30,14 @@ module.exports = mongoose => {
                 required: true,
                 default: Date.now  
             },
+            approved: {
+                type: Boolean,
+                default: false
+
+            },
             requestStatus: {
                 type: String,
-                enum : ['QUEUED', 'PROCESSING', 'APPROVED', 'DECLINED', 'CANCELLED', 'SUSPENDED'],
+                enum : ['QUEUED', 'PROCESSING', 'APPROVED', 'DECLINED', 'CANCELLED', 'SUSPENDED', 'NEEDS APPROVAL', 'PURCHASED'],
                 default : 'QUEUED'
             },
             isAssigned: {

@@ -39,12 +39,14 @@
           <label><strong>Requested User ID:</strong></label> {{ selectedRequest.requestedUserID }}
         </div>
         <div>
-            <button v-if="!checkStatus(selectedRequest)" class="btn btn-success" @click="allocateRequest(selectedRequest)">
-                Allocate Request
-            </button>
-            <button class="m-3 btn btn-sm btn-danger">
-                Decline Request
-            </button>
+            <div class="row">
+                <button class="btn btn-success" @click="approvePurchase(selectedRequest)">
+                    Approve Request
+                </button>
+                <button class="btn btn-danger" @click="declinePurchase(selectedRequest)">
+                    Decline Request
+                </button>
+            </div>
         </div>
       </div>
       <div v-else>
@@ -76,7 +78,7 @@ export default {
 
   methods: {
     retrieveRequests() {
-      RequestDataService.getUnassignedRequests()
+      RequestDataService.getRequestsToApprove()
           .then(response => {
             this.requests = response.data;
             console.log(response.data);
@@ -97,25 +99,36 @@ export default {
       this.currentIndex = index;
     },
 
-    checkStatus(request) {
-        return (request.isAssigned?true:false);
+    approvePurchase(request) {
+      this.requestToUpdate = request;
+      this.requestToUpdate.requestStatus = "APPROVED";
+      this.requestToUpdate.approved = true;
+
+      RequestDataService.approvePurchase(this.requestToUpdate._id, this.requestToUpdate)
+      .then(response => {
+          console.log(response.data);
+          this.$router.push({ name: "approve-requests" });
+        })
+        .catch(e => {
+          console.log(e);
+        });
+
     },
 
-    allocateRequest(request) {
-        this.requestToUpdate = request;
-        this.requestToUpdate.requestStatus = "PROCESSING";
-        this.requestToUpdate.isAssigned = true;
-        this.requestToUpdate.employeeAssignedID = this.currentUser.id;
+    declinePurchase(request) {
+      this.requestToUpdate = request;
+      this.requestToUpdate.requestStatus = "DECLINED";
 
-        RequestDataService.allocate(this.requestToUpdate._id, this.requestToUpdate)
-        .then(response => {
-            console.log(response.data);
-            this.$router.push({ name: "requests" });
-          })
-          .catch(e => {
-            console.log(e);
-          });
-    },
+      RequestDataService.declinePurchase(this.requestToUpdate._id, this.requestToUpdate)
+      .then(response => {
+          console.log(response.data);
+          this.$router.push({ name: "approve-requests" });
+        })
+        .catch(e => {
+          console.log(e);
+        });
+
+    }
   },
   mounted() {
     this.retrieveRequests();

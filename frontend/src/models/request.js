@@ -1,5 +1,5 @@
 export default class Request {
-    constructor(bookName, bookPrice, bookAuthor, bookDescription, bookGenre, requestedUserID, employeeAssignedID, dateCreated, requestStatus, isAssigned, needsMoreDetail, needsApproval) {
+    constructor(bookName, bookPrice, bookAuthor, bookDescription, bookGenre, requestedUserID, employeeAssignedID, dateCreated, approved, requestStatus, isAssigned, needsMoreDetail, needsApproval) {
         this.bookName = bookName;
         this.bookPrice = bookPrice;
         this.bookAuthor = bookAuthor;
@@ -8,6 +8,7 @@ export default class Request {
         this.requestedUserID = requestedUserID;
         this.employeeAssignedID = employeeAssignedID;
         this.dateCreated = dateCreated;
+        this.approved = approved;
         this.requestStatus = requestStatus;
         this.isAssigned = isAssigned;
         this.needsMoreDetail = needsMoreDetail;

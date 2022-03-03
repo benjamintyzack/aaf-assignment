@@ -15,10 +15,18 @@
         <li class="nav-item">
           <router-link to="/add-users" class="nav-link">Add Users</router-link>
         </li>
-        </div>
-        <li v-if="isEmployee" class="nav-item">
-          <router-link to="/requests" class="nav-link">Request List</router-link>
+        <li class="nav-item">
+          <router-link to="/approve-requests" class="nav-link">Approve Requests</router-link>
         </li>
+        </div>
+        <div v-if="isEmployee" class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <router-link to="/requests" class="nav-link">Request List</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/assigned-requests" class="nav-link">Assigned Requests</router-link>
+          </li>
+        </div>
         <li v-if="protectedContent" class="nav-item">
           <router-link to="/protectedcontent" class="nav-link">Protected</router-link>
         </li>
