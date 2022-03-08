@@ -39,14 +39,17 @@
           <label><strong>Requested User ID:</strong></label> {{ selectedRequest.requestedUserID }}
         </div>
         <div>
-            <button class="btn btn-success" v-if="!needsApproval(selectedRequest) && calculateTotalCost(selectedRequest)" @click="requestApproval(selectedRequest)">
+            <button class="btn btn-success" v-if="!needsApproval(selectedRequest) && calculateTotalCost(selectedRequest) && !checkRequestDetail(selectedRequest)" @click="requestApproval(selectedRequest)">
                 Request Authorisation
             </button>
-            <button class="btn btn-success">
+            <button class="btn btn-success" v-if="checkRequestDetail(selectedRequest) && selectedRequest.requestStatus != 'DECLINED'" @click="requestMoreDetail(selectedRequest)">
                 Request more detail
             </button>
-            <button class="m-3 btn btn-sm btn-danger">
-                Decline Request
+            <button class="btn btn-success" v-if="readyForPurchase(selectedRequest)" @click="purchased(selectedRequest)">
+                Purchase Book
+            </button>
+            <button class="m-3 btn btn-sm btn-danger" @click="deleteRequest(selectedRequest)">
+                Delete Request
             </button>
         </div>
       </div>
@@ -109,6 +112,18 @@ export default {
       }
     },
 
+    checkRequestDetail(request) {
+      if ((request.bookDescription == "" || request.bookAuthor == "" || request.bookGenre == "") && request.requestStatus != "SUSPENDED") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    readyForPurchase(request) {
+      return (request.readyForPurchase?true:false);
+    },
+
     needsApproval(request) {
         return (request.needsApproval?true:false);
     },
@@ -125,12 +140,52 @@ export default {
       RequestDataService.requestApproval(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
-          this.$router.push({ name: "assigned-requests" });
+          this.refreshList;
         })
         .catch(e => {
           console.log(e);
         });
 
+    },
+
+    requestMoreDetail(request) {
+      this.requestToUpdate = request;
+      this.requestToUpdate.requestStatus = "SUSPENDED";
+      this.requestToUpdate.needsMoreDetail = true;
+
+      RequestDataService.requestMoreDetail(this.requestToUpdate._id, this.requestToUpdate)
+      .then(response => {
+          console.log(response.data);
+          this.refreshList;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+
+    purchased(request) {
+      this.requestToUpdate = request;
+      this.requestToUpdate.requestStatus = "PURCHASED";
+
+      RequestDataService.purchase(this.requestToUpdate._id, this.requestToUpdate)
+      .then(response => {
+          console.log(response.data);
+          this.refreshList;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+
+    deleteRequest(request) {
+      RequestDataService.deleteRequest(request._id)
+      .then(response => {
+          console.log(response.data);
+          this.$router.go();
+        })
+        .catch(e => {
+          console.log(e);
+        });
     }
   },
   mounted() {

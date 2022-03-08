@@ -51,6 +51,10 @@ module.exports = mongoose => {
             needsApproval: {
                 type: Boolean,
                 default: false
+            },
+            readyForPurchase: {
+                type: Boolean,
+                default: false
             }
         
         })

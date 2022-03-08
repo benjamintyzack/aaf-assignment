@@ -39,7 +39,7 @@
           <label><strong>Requested User ID:</strong></label> {{ selectedRequest.requestedUserID }}
         </div>
         <div>
-            <div class="row">
+            <div class="row" v-if="checkStatus(selectedRequest)">
                 <button class="btn btn-success" @click="approvePurchase(selectedRequest)">
                     Approve Request
                 </button>
@@ -99,15 +99,25 @@ export default {
       this.currentIndex = index;
     },
 
+    checkStatus(request) {
+      if (request.approved == true || request.requestStatus == "DECLINED") {
+        return false;
+      } else {
+        return true;
+      }
+
+    },
+
     approvePurchase(request) {
       this.requestToUpdate = request;
       this.requestToUpdate.requestStatus = "APPROVED";
       this.requestToUpdate.approved = true;
+      this.requestToUpdate.readyForPurchase = true;
 
       RequestDataService.approvePurchase(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
-          this.$router.push({ name: "approve-requests" });
+          this.refreshList;
         })
         .catch(e => {
           console.log(e);
@@ -122,7 +132,7 @@ export default {
       RequestDataService.declinePurchase(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
-          this.$router.push({ name: "approve-requests" });
+          this.refreshList;
         })
         .catch(e => {
           console.log(e);

@@ -54,6 +54,23 @@ exports.findAll = (req, res) => {
         });
 };
 
+// Retrieve all Requests from the database.
+exports.getRequest = (req, res) => {
+    const id = req.params.id;
+
+    Request
+        .findById(id)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send( {
+                message: 
+                    err.message || "Some error occurred while retrieving Request."
+            });
+        });
+};
+
 // Retrieve all Requests for a User.
 exports.usersRequests = (req, res) => {
     const requestedUserID = req.params.id;
@@ -124,8 +141,8 @@ exports.getRequestsToApprove = (req, res) => {
         });
 };
 
-// Allocate Request to current Employee
-exports.allocate = (req, res) => {
+// Updates Request
+exports.updateRequest = (req, res) => {
     if (!req.body) {
         return res.status(400).send({
             message: "Data to update can not be empty!"
@@ -141,89 +158,35 @@ exports.allocate = (req, res) => {
                     message: `Cannot update Request with id=${id}. Maybe Request was not found!`
                 });
             } else
-                res.send({ message: "Request was Allocated Successfully." });
+                res.send({ message: "Request was Updated Successfully." });
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error allocating Request with id=" + id
+                message: "Error updating Request with id=" + id
             });
         });
 };
 
-// Request Approval for a request that is over the cost threshold
-exports.requestApproval = (req, res) => {
-    if (!req.body) {
-        return res.status(400).send({
-            message: "Data to update can not be empty!"
-        });
-    }
-
+// Delete a Request with the specified id in the request
+exports.delete = (req, res) => {
+    console.log("HI");
     const id = req.params.id;
 
-    Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    Request.findByIdAndRemove(id)
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: `Cannot update Request with id=${id}. Maybe Request was not found!`
+                    message: `Cannot delete Request with id=${id}. Maybe Request was not found!`
                 });
-            } else
-                res.send({ message: "Request Successfull, waiting for Approval" });
+            } else {
+                res.send({
+                    message: "Request was deleted successfully!"
+                });
+            }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error requesting authorisation for Request with id=" + id
-            });
-        });
-};
-
-// approve a purchase request
-exports.approvePurchase = (req, res) => {
-    if (!req.body) {
-        return res.status(400).send({
-            message: "Data to update can not be empty!"
-        });
-    }
-
-    const id = req.params.id;
-
-    Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-        .then(data => {
-            if (!data) {
-                res.status(404).send({
-                    message: `Cannot update Request with id=${id}. Maybe Request was not found!`
-                });
-            } else
-                res.send({ message: "Authorisation requested Successfully." });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Error requesting authorisation for Request with id=" + id
-            });
-        });
-};
-
-// decline a purchase request
-exports.declinePurchase = (req, res) => {
-    if (!req.body) {
-        return res.status(400).send({
-            message: "Data to update can not be empty!"
-        });
-    }
-
-    const id = req.params.id;
-
-    Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-        .then(data => {
-            if (!data) {
-                res.status(404).send({
-                    message: `Cannot decline Request with id=${id}. Maybe Request was not found!`
-                });
-            } else
-                res.send({ message: "Request Declined." });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Error declining for Request with id=" + id
+                message: "Could not delete Request with id=" + id
             });
         });
 };

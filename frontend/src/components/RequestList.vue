@@ -42,9 +42,6 @@
             <button v-if="!checkStatus(selectedRequest)" class="btn btn-success" @click="allocateRequest(selectedRequest)">
                 Allocate Request
             </button>
-            <button class="m-3 btn btn-sm btn-danger">
-                Decline Request
-            </button>
         </div>
       </div>
       <div v-else>
@@ -110,7 +107,7 @@ export default {
         RequestDataService.allocate(this.requestToUpdate._id, this.requestToUpdate)
         .then(response => {
             console.log(response.data);
-            this.$router.push({ name: "requests" });
+            this.$router.go();
           })
           .catch(e => {
             console.log(e);

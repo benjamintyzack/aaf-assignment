@@ -75,7 +75,12 @@ const router = new Router({
             path: '/approve-requests',
             name: 'approve-requests',
             component: () => import("./components/ApprovalList.vue")
-        }
+        },
+        {
+            path: '/update-request/:id',
+            name: 'update-request',
+            component: () => import("./components/UpdateRequest.vue")
+        },
     ]
 });
 

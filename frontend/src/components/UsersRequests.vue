@@ -39,7 +39,7 @@
           <label><strong>Requested User ID:</strong></label> {{ selectedRequest.requestedUserID }}
         </div>
         <div>
-            <button v-if="needsMoreDetail(selectedRequest)" class="btn btn-success">
+            <button v-if="needsMoreDetail(selectedRequest)" class="btn btn-success" @click="updateRequest(selectedRequest._id)">
                 Update Request
             </button>
             <button v-if="!isAssigned(selectedRequest)" class="m-3 btn btn-sm btn-danger" @click="cancelRequest(selectedRequest._id)">
@@ -98,12 +98,21 @@ export default {
     },
 
     isAssigned(request) {
-        return (request.isAssigned?false:true);
+        return (request.isAssigned?true:false);
     },
 
     needsMoreDetail(request) {
-        return (request.needsMoreDetail?true:false);
+        if(request.needsMoreDetail && request.requestStatus == "SUSPENDED") {
+          return true;
+        } else {
+          return false;
+        }
     },
+
+    updateRequest(requestID) {
+      this.$router.replace({name: "update-request", params: {id:requestID}});
+    },
+
     cancelRequest(request) {
         this.requestToUpdate = request;
         this.requestToUpdate.requestStatus = "CANCELLED";
