@@ -13,7 +13,7 @@
           <router-link to="/users" class="nav-link">List Users</router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/add-users" class="nav-link">Add Users</router-link>
+          <router-link to="/user-add" class="nav-link">Add Users</router-link>
         </li>
         <li class="nav-item">
           <router-link to="/approve-requests" class="nav-link">Approve Requests</router-link>

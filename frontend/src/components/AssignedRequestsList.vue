@@ -39,7 +39,7 @@
           <label><strong>Requested User ID:</strong></label> {{ selectedRequest.requestedUserID }}
         </div>
         <div>
-            <button class="btn btn-success" v-if="!needsApproval(selectedRequest) && calculateTotalCost(selectedRequest) && !checkRequestDetail(selectedRequest)" @click="requestApproval(selectedRequest)">
+            <button class="btn btn-success" v-if="!needsApproval(selectedRequest) && calculateTotalCost(selectedRequest) && !checkSuspended(selectedRequest)" @click="requestApproval(selectedRequest)">
                 Request Authorisation
             </button>
             <button class="btn btn-success" v-if="checkRequestDetail(selectedRequest) && selectedRequest.requestStatus != 'DECLINED'" @click="requestMoreDetail(selectedRequest)">
@@ -125,11 +125,19 @@ export default {
     },
 
     needsApproval(request) {
-        return (request.needsApproval?true:false);
+        return (request.needsApproval);
     },
 
     needsMoreDetail(request) {
         return (request.needsMoreDetail?true:false);
+    },
+
+    checkSuspended(request) {
+      if(request.requestStatus == "SUSPENDED") {
+        return true;
+      } else {
+        return false;
+      }
     },
 
     requestApproval(request) {

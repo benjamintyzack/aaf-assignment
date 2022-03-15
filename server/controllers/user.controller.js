@@ -1,17 +1,33 @@
 const db = require("../models");
+const  bcrypt = require('bcryptjs');
 const User = db.users;
 
-// Create and Save a new User
-exports.create = (req, res) => {
+/**
+ * create | Creates a new user object and stores it in the database.
+ * @param  {Object} req	| An Object sent via the HTTP request.
+ * @return {Object} message | A message informing how the request finished.
+ */
+exports.create = (async (req, res) => {
     // Validate request
-   if (!req.body.username) {
-       res.status(400).send({ message: "Content can not be empty!" });
+   if (!req.body.username || !req.body.password) {
+       res.status(400).send("Content can't be empty!");
        return;
    }
+   console.log(req.body.username);
+   const oldUser = await User.findOne({ username: req.body.username });
+
+   if (oldUser) {
+        // username already exists, so return error
+      return res.status(409).send("Username already exists!");
+    }
+
+    encryptedPassword = await bcrypt.hash(req.body.password, 8);
  
    // Create an User model object
    const user = new User({
-       username: req.body.username
+       username: req.body.username,
+       password: encryptedPassword,
+       isEmployee: req.body.isEmployee
    });
  
    // Save User in the database
@@ -19,15 +35,13 @@ exports.create = (req, res) => {
        .save()
        .then(data => {
            console.log("User saved in the database: " + data);
-           res.send(data);
+           res.status(201).send("User saved successfully!");
        })
        .catch(err => {
-           res.status(500).send( {
-               message:
-                 err.message || "Some error occurred while creating the User."
-           });
+           res.status(500).send({ 
+            message: err || "Some error during save"});
        });
-};
+});
 
 // Retrieve all Users from the database.
 exports.findAll = (req, res) => {

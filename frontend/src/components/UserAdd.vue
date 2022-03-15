@@ -11,8 +11,24 @@
             v-model="user.username"
             name="username"
         />
+        <label for="password">Password</label>
+            <input
+                v-model="user.password"
+                v-validate="'required|min:6|max:40'"
+                type="password"
+                class="form-control"
+                name="password"
+            />
+        <label for="employee">Make Employee</label>
+          <input
+              v-model="user.isEmployee"
+              type="checkbox"
+              name="employee"
+              id="employee"
+          />
       </div>
       <button @click="saveUser" class="btn btn-success">Submit</button>
+      <p>{{ message }}</p>
     </div>
     <div v-else>
       <h4>You submitted successfully!</h4>
@@ -30,25 +46,32 @@ export default {
     return {
       user: {
         _id: null,
-        username: ''
+        username: '',
+        password: '',
+        isEmployee: false
       },
-      submitted: false
+      submitted: false,
+      message: ''
     };
   },
   methods: {
     saveUser() {
       var data = {
-        username: this.user.username
+        username: this.user.username,
+        password: this.user.password,
+        isEmployee: this.user.isEmployee
       };
 
       UserDataService.create(data)
           .then(response => {
             this.user._id = response.data._id;
             console.log(response.data);
-            this.submitted = true;
+            this.message = response.data;
+            // this.submitted = true;
           })
           .catch(e => {
             console.log(e);
+            this.message = e.response.data;
           });
     },
 

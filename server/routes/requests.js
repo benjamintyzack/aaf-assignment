@@ -28,6 +28,8 @@ router.put("/requests/:id/allocate", requestController.updateRequest);
 
 router.put("/requests/:id/purchase", requestController.updateRequest);
 
+router.put("/requests/:id/cancel", requestController.updateRequest);
+
 router.put("/requests/:id/request-approval", requestController.updateRequest);
 
 router.put("/requests/:id/request-detail", requestController.updateRequest);

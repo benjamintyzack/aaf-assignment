@@ -18,7 +18,8 @@ exports.create = (req, res) => {
        bookAuthor: req.body.bookAuthor,
        bookDescription: req.body.bookDescription,
        bookGenre: req.body.bookGenre,
-       requestedUserID: req.body.requestedUserID
+       requestedUserID: req.body.requestedUserID,
+       readyForPurchase: req.body.readyForPurchase
    });
  
    // Save User in the database

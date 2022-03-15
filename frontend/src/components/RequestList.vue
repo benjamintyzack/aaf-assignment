@@ -39,7 +39,7 @@
           <label><strong>Requested User ID:</strong></label> {{ selectedRequest.requestedUserID }}
         </div>
         <div>
-            <button v-if="!checkStatus(selectedRequest)" class="btn btn-success" @click="allocateRequest(selectedRequest)">
+            <button v-if="checkStatus(selectedRequest)" class="btn btn-success" @click="allocateRequest(selectedRequest)">
                 Allocate Request
             </button>
         </div>
@@ -95,7 +95,11 @@ export default {
     },
 
     checkStatus(request) {
-        return (request.isAssigned?true:false);
+        if(request.requestStatus != "CANCELLED") {
+          return true;
+        } else {
+          return false;
+        }
     },
 
     allocateRequest(request) {

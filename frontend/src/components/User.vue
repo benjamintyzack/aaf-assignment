@@ -9,25 +9,37 @@
         />
       </div>
       <div class="form-group">
-        <label for="animals">Animals</label>
-        <input type="text" class="form-control" id="animals"
-               v-model="currentUser.animals"
-        />
+        <label for="employee">Make Employee</label>
+            <input
+                v-model="currentUser.isEmployee"
+                type="checkbox"
+                name="employee"
+                id="employee"
+                @click="disableAdmin"
+            />
+            <label for="admin">Make Admin</label>
+            <input
+                v-model="currentUser.isAdmin"
+                type="checkbox"
+                name="admin"
+                id="admin"
+                @click="disableEmployee"
+            />
       </div>
     </form>
 
-    <button class="badge badge-danger mr-2"
+    <button class="m-3 btn btn-sm btn-danger"
             @click="deleteUser"
     >
       Delete
     </button>
 
-    <button type="submit" class="badge badge-success"
+    <button type="submit" class="btn btn-success"
             @click="updateUser"
     >
       Update
     </button>
-    <p>{{ message }}</p>
+    <p role="alert">{{ message }}</p>
   </div>
 
   <div v-else>
@@ -63,9 +75,10 @@ export default {
       UserDataService.update(this.currentUser._id, this.currentUser)
           .then(response => {
             console.log(response.data);
-            this.message = 'The user was updated successfully!';
+            this.message = response.data;
           })
           .catch(e => {
+            this.message = e.response.message;
             console.log(e);
           });
     },
@@ -79,6 +92,29 @@ export default {
           .catch(e => {
             console.log(e);
           });
+    },
+
+    disableEmployee() {
+        var employeeCheck = document.getElementById("employee");
+        var adminCheck = document.getElementById("admin");
+
+        if (adminCheck.checked) {
+          employeeCheck.disabled = true;
+        }
+        else {
+          employeeCheck.disabled = false;
+        }
+    },
+    disableAdmin() {
+        var employeeCheck = document.getElementById("employee");
+        var adminCheck = document.getElementById("admin");
+
+        if (employeeCheck.checked) {
+          adminCheck.disabled = true;
+        }
+        else {
+          adminCheck.disabled = false;
+        }
     }
   },
   mounted() {

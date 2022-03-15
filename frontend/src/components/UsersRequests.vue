@@ -42,7 +42,7 @@
             <button v-if="needsMoreDetail(selectedRequest)" class="btn btn-success" @click="updateRequest(selectedRequest._id)">
                 Update Request
             </button>
-            <button v-if="!isAssigned(selectedRequest)" class="m-3 btn btn-sm btn-danger" @click="cancelRequest(selectedRequest._id)">
+            <button v-if="!isAssigned(selectedRequest)" class="m-3 btn btn-sm btn-danger" @click="cancelRequest(selectedRequest)">
                 Cancel Request
             </button>
         </div>
@@ -119,7 +119,7 @@ export default {
         RequestDataService.cancel(this.requestToUpdate._id, this.requestToUpdate)
         .then(response => {
             console.log(response.data);
-            this.$router.push({ name: "users-requests" });
+            this.refreshList();
           })
           .catch(e => {
             console.log(e);

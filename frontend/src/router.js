@@ -24,8 +24,8 @@ const router = new Router({
             component: () => import("./components/User")
         },
         {
-            path: '/add-user',
-            name: 'add-user',
+            path: '/user-add',
+            name: 'user-add',
             component: () => import("./components/UserAdd")
         },
         {

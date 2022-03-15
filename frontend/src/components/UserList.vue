@@ -39,7 +39,10 @@
           <label><strong>Username:</strong></label> {{ currentUser.username }}
         </div>
         <div>
-          <label><strong>Animals:</strong></label> {{currentUser.animals}}
+          <label><strong>Employee:</strong></label> {{currentUser.isEmployee}}
+        </div>
+        <div>
+          <label><strong>Admin:</strong></label> {{currentUser.isAdmin}}
         </div>
 
         <a

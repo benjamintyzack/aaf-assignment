@@ -62,7 +62,8 @@ export default {
         bookAuthor: '',
         bookDescription: '',
         bookGenre: ''
-      }
+      },
+      readyForPurchase: false
     };
   },
   computed: {
@@ -72,13 +73,18 @@ export default {
   },
   methods: {
     saveRequest() {
+
+      if((this.request.bookAuthor != "" && this.request.bookDescription != "" && this.request.bookGenre != "") && parseInt(this.request.bookPrice) < 20) {
+        this.readyForPurchase = true;
+      }
       var data = {
         bookName: this.request.bookName,
         bookPrice: this.request.bookPrice,
         bookAuthor: this.request.bookAuthor,
         bookDescription: this.request.bookDescription,
         bookGenre: this.request.bookGenre,
-        requestedUserID: this.currentUser.id
+        requestedUserID: this.currentUser.id,
+        readyForPurchase: this.readyForPurchase
       };
 
       RequestDataService.create(data)
