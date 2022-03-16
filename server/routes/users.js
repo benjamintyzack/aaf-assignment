@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const { authjwt } = require("../middlewares");
+const {adminCheck} = require("../middlewares");
  
 //Require controller
 var userController = require('../controllers/user.controller');
@@ -9,21 +11,21 @@ router.get('/', function(req, res, next) {
 });
 
 // Create a new user
-router.post("/users/", userController.create);
+router.post("/users/", [authjwt.verifyToken], [adminCheck.verifyAdmin], userController.create);
  
 // Retrieve all users
-router.get("/users/", userController.findAll);
+router.get("/users/", [authjwt.verifyToken], [adminCheck.verifyAdmin], userController.findAll);
  
 // Retrieve a single user with id
-router.get("/users/:id", userController.findOne);
+router.get("/users/:id", [authjwt.verifyToken], [adminCheck.verifyAdmin], userController.findOne);
  
 // Update a user with id
-router.put("/users/:id", userController.update);
+router.put("/users/:id", [authjwt.verifyToken], [adminCheck.verifyAdmin], userController.update);
  
 // Delete a user with id
-router.delete("/users/:id", userController.delete);
+router.delete("/users/:id", [authjwt.verifyToken], [adminCheck.verifyAdmin], userController.delete);
  
 // Delete all users of the database
-router.delete("/users/", userController.deleteAll);
+router.delete("/users/", [authjwt.verifyToken], [adminCheck.verifyAdmin], userController.deleteAll);
  
 module.exports = router;

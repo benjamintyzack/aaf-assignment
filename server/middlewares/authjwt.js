@@ -3,21 +3,24 @@ const config = require("../config/auth.config.js");
 const db = require("../models");
 const User = db.users;
 
-verifyToken = (req, res, next) => {
+verifyToken = (async (req, res, next) => {
   let token = req.headers["x-access-token"];
 
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }
-
-  jwt.verify(token, config.secret, (err, decoded) => {
-    if (err) {
-      return res.status(401).send({ message: "Unauthorized!" });
-    }
-    req.userId = decoded.id;
-    next();
-  });
-};
+  try {
+    const decoded = jwt.verify(token, config.secret);
+    console.log(decoded);
+    const user = await User.findOne({ _id: decoded.id })
+    req.user = user;
+  } catch (err) {
+    console.log(err);
+    
+    return res.status(401).send("Invalid Token");
+  }
+  return next();
+});
 
 const authjwt = {
   verifyToken

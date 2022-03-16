@@ -1,43 +1,46 @@
 var express = require('express');
 var router = express.Router();
+const { authjwt } = require("../middlewares");
+const {employeeCheck} = require("../middlewares");
+const {adminCheck} = require("../middlewares");
 
 var requestController = require('../controllers/request.controller');
 
 // Add in the routes for requests
 // Create a new request
-router.post("/requests/", requestController.create);
+router.post("/requests/", [authjwt.verifyToken], requestController.create);
+
+// Retrieve a single requests
+router.get("/request/:id", [authjwt.verifyToken], requestController.getRequest);
 
 // Retrieve all requests
-router.get("/request/:id", requestController.getRequest);
+router.get("/requests/", [authjwt.verifyToken], requestController.findAll);
 
-// Retrieve all requests
-router.get("/requests/", requestController.findAll);
+router.get("/requests/unassigned", [authjwt.verifyToken], [employeeCheck.verifyEmployee], requestController.getUnassignedRequests);
 
-router.get("/requests/unassigned", requestController.getUnassignedRequests);
-
-router.get("/requests/approval", requestController.getRequestsToApprove);
+router.get("/requests/approval", [authjwt.verifyToken], [adminCheck.verifyAdmin], requestController.getRequestsToApprove);
 
 // Retrieve requests for current user
-router.get("/requests/:id", requestController.usersRequests);
+router.get("/requests/:id", [authjwt.verifyToken], requestController.usersRequests);
 
-router.get("/requests/:id/assigned", requestController.getAssignedRequests);
+router.get("/requests/:id/assigned", [authjwt.verifyToken], [employeeCheck.verifyEmployee], requestController.getAssignedRequests);
 
-router.put("/requests/:id/", requestController.updateRequest);
+router.put("/requests/:id/", [authjwt.verifyToken], requestController.updateRequest);
 
-router.put("/requests/:id/allocate", requestController.updateRequest);
+router.put("/requests/:id/allocate", [authjwt.verifyToken], [employeeCheck.verifyEmployee], requestController.updateRequest);
 
-router.put("/requests/:id/purchase", requestController.updateRequest);
+router.put("/requests/:id/purchase", [authjwt.verifyToken], [employeeCheck.verifyEmployee], requestController.updateRequest);
 
-router.put("/requests/:id/cancel", requestController.updateRequest);
+router.put("/requests/:id/cancel", [authjwt.verifyToken], requestController.updateRequest);
 
-router.put("/requests/:id/request-approval", requestController.updateRequest);
+router.put("/requests/:id/request-approval", [authjwt.verifyToken], [employeeCheck.verifyEmployee], requestController.updateRequest);
 
-router.put("/requests/:id/request-detail", requestController.updateRequest);
+router.put("/requests/:id/request-detail", [authjwt.verifyToken], [employeeCheck.verifyEmployee], requestController.updateRequest);
 
-router.put("/requests/:id/approved", requestController.updateRequest);
+router.put("/requests/:id/approved", [authjwt.verifyToken], [adminCheck.verifyAdmin], requestController.updateRequest);
 
-router.put("/requests/:id/declined", requestController.updateRequest);
+router.put("/requests/:id/declined", [authjwt.verifyToken], [adminCheck.verifyAdmin], requestController.updateRequest);
 
-router.delete("/requests/:id", requestController.delete);
+router.delete("/requests/:id", [authjwt.verifyToken], requestController.delete);
 
 module.exports = router;

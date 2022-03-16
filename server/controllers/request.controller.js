@@ -75,6 +75,7 @@ exports.getRequest = (req, res) => {
 // Retrieve all Requests for a User.
 exports.usersRequests = (req, res) => {
     const requestedUserID = req.params.id;
+    console.log(req.user);
     //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
     var condition = requestedUserID ? { requestedUserID: { $regex: new RegExp(requestedUserID), $options: "i" } } : {};
     Request
