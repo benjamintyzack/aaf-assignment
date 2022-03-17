@@ -10,13 +10,7 @@ module.exports = function(app) {
     next();
   });
 
-  app.post(
-    "/bookstore/auth/signup",
-    [
-      verifySignUp.checkDuplicateUsername
-    ],
-    controller.signup
-  );
+  app.post("/bookstore/auth/signup", [ verifySignUp.checkDuplicateUsername], controller.signup);
 
   app.post("/bookstore/auth/signin", controller.signin);
 };

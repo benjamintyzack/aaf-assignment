@@ -31,113 +31,94 @@ exports.create = (async (req, res) => {
    });
  
    // Save User in the database
-   user
-       .save()
-       .then(data => {
-           console.log("User saved in the database: " + data);
-           res.status(201).send("User saved successfully!");
-       })
-       .catch(err => {
-           res.status(500).send({ 
-            message: err || "Some error during save"});
-       });
+   await user
+            .save()
+            .then(data => {
+                console.log("User saved in the database: " + data);
+                res.status(201).send("User saved successfully!");
+            })
+            .catch(err => {
+                res.status(500).send({ message: err || "Some error during save"});
+            });
 });
 
 // Retrieve all Users from the database.
-exports.findAll = (req, res) => {
+exports.findAll = (async (req, res) => {
     const username = req.query.username;
     //We use req.query.name to get query string from the Request and consider it as condition for findAll() method.
     var condition = username ? { username: { $regex: new RegExp(username), $options: "i" } } : {};
-    User
-        .find(condition)
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send( {
-                message: 
-                    err.message || "Some error occurred while retrieving Users."
+    await User
+            .find(condition)
+            .then(data => {
+                res.status(200).send(data);
+            })
+            .catch(err => {
+                res.status(500).send({ message: err.message || "Some error occurred while retrieving Users." });
             });
-        });
-};
+});
 
 // Find a single User with an id
-exports.findOne = (req, res) => {
+exports.findOne = ( async (req, res) => {
     const id = req.params.id;
 
-    User.findById(id)
-        .then(data => {
-            if (!data)
-                res.status(404).send({ message: "Not found User with id: " + id});
-            else
-                res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({message: "Error retrieving User with id: " + id});
-        })
-};
+    await User.findById(id)
+            .then(data => {
+                if (!data)
+                    res.status(404).send({ message: "Not found User with id: " + id});
+                else
+                    res.status(200).send(data);
+            })
+            .catch(err => {
+                res.status(500).send({message: "Error retrieving User with id: " + id});
+            })
+});
 
 // Update a User by the id in the request
-exports.update = (req, res) => {
+exports.update = ( async (req, res) => {
     if (!req.body) {
-        return res.status(400).send({
-            message: "Data to update can not be empty!"
-        });
+        return res.status(400).send({ message: "Data to update can not be empty!" });
     }
 
     const id = req.params.id;
 
-    User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-        .then(data => {
-            if (!data) {
-                res.status(404).send({
-                    message: `Cannot update User with id=${id}. Maybe User was not found!`
-                });
-            } else
-                res.send({ message: "User was updated successfully." });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Error updating User with id=" + id
+    await User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+            .then(data => {
+                if (!data) {
+                    res.status(404).send({
+                        message: `Cannot update User with id=${id}. Maybe User was not found!`
+                    });
+                } else
+                    res.status(200).send({ message: "User was updated successfully." });
+            })
+            .catch(err => {
+                res.status(500).send({ message: err.message || "Error updating User with id=" + id });
             });
-        });
-};
+});
  
 // Delete a User with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = ( async (req, res) => {
     const id = req.params.id;
 
-    User.findByIdAndRemove(id)
-        .then(data => {
-            if (!data) {
-                res.status(404).send({
-                    message: `Cannot delete User with id=${id}. Maybe User was not found!`
-                });
-            } else {
-                res.send({
-                    message: "User was deleted successfully!"
-                });
-            }
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Could not delete User with id=" + id
+    await User.findByIdAndRemove(id)
+            .then(data => {
+                if (!data) {
+                    res.status(404).send({ message: `Cannot delete User with id=${id}. Maybe User was not found!` });
+                } else {
+                    res.status(200).send({ message: "User was deleted successfully!" });
+                }
+            })
+            .catch(err => {
+                res.status(500).send({ message: err.message || "Could not delete User with id=" + id });
             });
-        });
-};
+});
  
 // Delete all Users from the database.
-exports.deleteAll = (req, res) => {
-    User.deleteMany({})
+exports.deleteAll = ( async (req, res) => {
+    await User.deleteMany({})
         .then(data => {
-            res.send({
-                message: `${data.deletedCount} Users were deleted successfully!`
-            });
+            res.status(200).send({ message: `${data.deletedCount} Users were deleted successfully!` });
         })
         .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all users."
-            });
+            res.status(500).send({ message: err.message || "Some error occurred while removing all users." });
         });
-};
+});
