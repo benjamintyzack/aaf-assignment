@@ -6,7 +6,6 @@ verifyAdmin = async (req, res, next) => {
 		if (req.user.isAdmin == true){
 			return next();
 		} else {
-			res.status(401);
 			return res.status(401).send("Not Authorised For This Request, Admin needed");
 		}
     } catch {

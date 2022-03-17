@@ -27,9 +27,6 @@
             <router-link to="/assigned-requests" class="nav-link">Assigned Requests</router-link>
           </li>
         </div>
-        <li v-if="protectedContent" class="nav-item">
-          <router-link to="/protectedcontent" class="nav-link">Protected</router-link>
-        </li>
         <div v-if="!isAdmin && !isEmployee" class="navbar-nav mr-auto">
           <li class="nav-item">
               <router-link to="/add-requests" class="nav-link">Add Request</router-link>
@@ -53,7 +50,7 @@
       </div>
       <div v-if="currentUser" class="navbar-nav ml-auto">
         <li class="nav-item">
-          <router-link to="/profile" class="nav-link">
+          <router-link to="" class="nav-link">
             <font-awesome-icon icon="user" />
             {{ currentUser.username }}
           </router-link>

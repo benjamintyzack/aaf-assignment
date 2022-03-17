@@ -5,24 +5,40 @@ module.exports = mongoose => {
             bookName: {
                 type: String,
                 required: true,
+                minlength: 3,
+                maxlength: 64
             },
             bookPrice: {
-                type: String
+                type: String,
+                required: true,
+                default: "",
+                maxlength: 32
             },
             bookAuthor: {
-                type: String
+                type: String,
+                required: false,
+                default: "",
+                maxlength: 64
             },
             bookDescription: {
-                type: String
+                type: String,
+                required: false,
+                default: "",
+                maxlength: 256,
             },
             bookGenre: {
-                type: String
+                type: String,
+                required: false,
+                default: "",
+                maxlength: 128
             },
             requestedUserID: {
-                type: String
+                type: String,
+                required: false,
             },
             employeeAssignedID: {
                 type: String,
+                required: false,
                 default: ""
             },
             dateCreated:{
@@ -32,30 +48,30 @@ module.exports = mongoose => {
             },
             approved: {
                 type: Boolean,
+                required: false,
                 default: false
 
             },
             requestStatus: {
                 type: String,
-                enum : ['QUEUED', 'PROCESSING', 'APPROVED', 'DECLINED', 'CANCELLED', 'SUSPENDED', 'NEEDS APPROVAL', 'PURCHASED'],
+                enum : ['QUEUED', 'PROCESSING', 'DECLINED', 'CANCELLED', 'SUSPENDED', 'NEEDS APPROVAL', 'PURCHASED'],
                 default : 'QUEUED'
             },
             isAssigned: {
                 type: Boolean,
+                required: false,
                 default: false
             },
             needsMoreDetail: {
                 type: Boolean,
+                required: false,
                 default: false
             },
             needsApproval: {
                 type: Boolean,
+                required: false,
                 default: false
             },
-            readyForPurchase: {
-                type: Boolean,
-                default: false
-            }
         
         })
 

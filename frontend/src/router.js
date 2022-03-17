@@ -42,16 +42,6 @@ const router = new Router({
             component: Register
         },
         {
-            path: '/profile',
-            name: 'profile',
-            component: () => import('./components/Profile.vue')
-        },
-        {
-            path: '/protectedcontent',
-            name: 'protectedcontent',
-            component: () => import('./components/ProtectedContent.vue')
-        },
-        {
             path: '/add-requests',
             name: 'add-requests',
             component: () => import("./components/RequestAdd.vue")

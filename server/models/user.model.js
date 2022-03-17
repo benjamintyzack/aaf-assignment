@@ -4,12 +4,17 @@ module.exports = mongoose => {
         mongoose.Schema({
             username: {
                 type: String,
-                required: true,
+                required: [true, 'A username is required'],
                 lowercase: true,
-                unique: true
+                unique: true,
+                minlength: 3,
+                maxlength: 20
             },
             password: {
-                type: String
+                type: String,
+                required: [true, 'A password is required'],
+                minlength: 6,
+                maxlength: 40
             },
             dateCreated:{
                 type: Date,
@@ -18,10 +23,12 @@ module.exports = mongoose => {
             },
             isEmployee: {
                 type: Boolean,
+                required: false,
                 default: false
             },
             isAdmin: {
                 type: Boolean,
+                required: false,
                 default: false
             }
         

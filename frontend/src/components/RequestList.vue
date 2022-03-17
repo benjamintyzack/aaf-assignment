@@ -43,6 +43,11 @@
                 Allocate Request
             </button>
         </div>
+        <div> 
+          <button class="m-3 btn btn-sm btn-danger" @click="deleteRequest(selectedRequest)">
+                Delete Request
+          </button>
+        </div>
       </div>
       <div v-else>
         <br />
@@ -117,6 +122,17 @@ export default {
             console.log(e);
           });
     },
+
+    deleteRequest(request) {
+      RequestDataService.deleteRequest(request._id)
+      .then(response => {
+          console.log(response.data);
+          this.$router.go();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
   },
   mounted() {
     this.retrieveRequests();

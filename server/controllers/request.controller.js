@@ -111,7 +111,7 @@ exports.getUnassignedRequests = ( async (req, res) => {
 // Retrieve all Requests that need to be approved.
 exports.getRequestsToApprove = ( async (req, res) => {
     //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
-    var condition = { needsApproval : true };
+    var condition = { requestStatus : "NEEDS APPROVAL" };
     await Request
             .find(condition)
             .then(data => {

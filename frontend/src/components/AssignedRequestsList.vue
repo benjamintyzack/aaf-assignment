@@ -39,13 +39,13 @@
           <label><strong>Requested User ID:</strong></label> {{ selectedRequest.requestedUserID }}
         </div>
         <div>
-            <button class="btn btn-success" v-if="!needsApproval(selectedRequest) && calculateTotalCost(selectedRequest) && !checkSuspended(selectedRequest)" @click="requestApproval(selectedRequest)">
+            <button class="btn btn-success" v-if="!needsApproval(selectedRequest) && !checkSuspended(selectedRequest)" @click="requestApproval(selectedRequest)">
                 Request Authorisation
             </button>
-            <button class="btn btn-success" v-if="checkRequestDetail(selectedRequest) && selectedRequest.requestStatus != 'DECLINED'" @click="requestMoreDetail(selectedRequest)">
+            <button class="btn btn-success" v-if="checkRequestDetail(selectedRequest) && selectedRequest.requestStatus == 'PROCESSING'" @click="requestMoreDetail(selectedRequest)">
                 Request more detail
             </button>
-            <button class="btn btn-success" v-if="readyForPurchase(selectedRequest)" @click="purchased(selectedRequest)">
+            <button class="btn btn-success" v-if="!checkRequestDetail(selectedRequest) && selectedRequest.requestStatus == 'PROCESSING'" @click="purchased(selectedRequest)">
                 Purchase Book
             </button>
             <button class="m-3 btn btn-sm btn-danger" @click="deleteRequest(selectedRequest)">
@@ -103,25 +103,12 @@ export default {
       this.currentIndex = index;
     },
 
-    calculateTotalCost(request) {
-      if(parseInt(request.bookPrice) >= 20) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    },
-
     checkRequestDetail(request) {
       if ((request.bookDescription == "" || request.bookAuthor == "" || request.bookGenre == "") && request.requestStatus != "SUSPENDED") {
         return true;
       } else {
         return false;
       }
-    },
-
-    readyForPurchase(request) {
-      return (request.readyForPurchase?true:false);
     },
 
     needsApproval(request) {
@@ -133,7 +120,7 @@ export default {
     },
 
     checkSuspended(request) {
-      if(request.requestStatus == "SUSPENDED") {
+      if((request.requestStatus == "SUSPENDED" || request.requestStatus == "PURCHASED")) {
         return true;
       } else {
         return false;

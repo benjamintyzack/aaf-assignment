@@ -45,6 +45,10 @@
         />
       </div>
       <button @click="saveRequest" class="btn btn-success">Submit</button>
+      <div>
+        <p class="alert-success"> {{message}} </p>
+        <p class="alert-danger"> {{errMsg}} </p>
+      </div>
   </div>
 </template>
 
@@ -63,7 +67,9 @@ export default {
         bookDescription: '',
         bookGenre: ''
       },
-      readyForPurchase: false
+      readyForPurchase: false,
+      errMsg: '',
+      message: ''
     };
   },
   computed: {
@@ -73,10 +79,6 @@ export default {
   },
   methods: {
     saveRequest() {
-
-      if((this.request.bookAuthor != "" && this.request.bookDescription != "" && this.request.bookGenre != "") && parseInt(this.request.bookPrice) < 20) {
-        this.readyForPurchase = true;
-      }
       var data = {
         bookName: this.request.bookName,
         bookPrice: this.request.bookPrice,
@@ -84,16 +86,17 @@ export default {
         bookDescription: this.request.bookDescription,
         bookGenre: this.request.bookGenre,
         requestedUserID: this.currentUser.id,
-        readyForPurchase: this.readyForPurchase
       };
 
       RequestDataService.create(data)
           .then(response => {
             console.log(response.data);
+            this.message = "Request Successfully created";
             this.request = {};
           })
           .catch(e => {
             console.log(e);
+            this.errMsg = e.response.data.message;
           });
     }
   }

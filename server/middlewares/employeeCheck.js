@@ -6,7 +6,6 @@ verifyEmployee = async (req, res, next) => {
 		if (req.user.isEmployee == true){
 			return next();
 		} else {
-			res.status(401);
 			return res.status(401).send("Not Authorised For This Request, Employee needed");
 		}
     } catch {
