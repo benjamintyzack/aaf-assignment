@@ -45,6 +45,24 @@ db.mongoose.connect(db.url, {
     process.exit();
 });
 
+// Creating the chat socket
+var chatSocket = require('socket.io')(
+  {
+      cors: {
+          origins: ['http://localhost:8080']
+      }
+  }
+);
+
+// Importing the chat controller
+var chatController = require('./controllers/chat.controller');
+
+var chat = chatSocket
+  .of('/chat') //We are defining an endpoint for the chat
+  .on('connection', function (socket) {
+      chatController.respond(chat,socket);
+  });
+
 app.use('/bookstore', indexRouter);
 app.use('/bookstore', usersRouter);
 app.use('/bookstore', requestsRouter);
@@ -68,4 +86,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = { app, chatSocket };

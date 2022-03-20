@@ -91,11 +91,13 @@ export default {
       RequestDataService.create(data)
           .then(response => {
             console.log(response.data);
+            this.errMsg = '';
             this.message = "Request Successfully created";
             this.request = {};
           })
           .catch(e => {
             console.log(e);
+            this.message = '';
             this.errMsg = e.response.data.message;
           });
     }

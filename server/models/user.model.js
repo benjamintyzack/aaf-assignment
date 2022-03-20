@@ -14,7 +14,7 @@ module.exports = mongoose => {
                 type: String,
                 required: [true, 'A password is required'],
                 minlength: 6,
-                maxlength: 40
+                maxlength: 150
             },
             dateCreated:{
                 type: Date,

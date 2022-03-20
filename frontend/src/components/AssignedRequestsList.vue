@@ -39,7 +39,7 @@
           <label><strong>Requested User ID:</strong></label> {{ selectedRequest.requestedUserID }}
         </div>
         <div>
-            <button class="btn btn-success" v-if="!needsApproval(selectedRequest) && !checkSuspended(selectedRequest)" @click="requestApproval(selectedRequest)">
+            <button class="btn btn-success" v-if="!needsApproval(selectedRequest) && !checkSuspended(selectedRequest) && !checkRequestDetail(selectedRequest)" @click="requestApproval(selectedRequest)">
                 Request Authorisation
             </button>
             <button class="btn btn-success" v-if="checkRequestDetail(selectedRequest) && selectedRequest.requestStatus == 'PROCESSING'" @click="requestMoreDetail(selectedRequest)">
