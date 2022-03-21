@@ -113,7 +113,7 @@ export default {
         this.requestToUpdate.isAssigned = true;
         this.requestToUpdate.employeeAssignedID = this.currentUser.id;
 
-        RequestDataService.allocate(this.requestToUpdate._id, this.requestToUpdate)
+        RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
         .then(response => {
             console.log(response.data);
             this.$router.go();

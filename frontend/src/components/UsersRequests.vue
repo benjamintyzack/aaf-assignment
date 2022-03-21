@@ -116,7 +116,7 @@ export default {
     cancelRequest(request) {
         this.requestToUpdate = request;
         this.requestToUpdate.requestStatus = "CANCELLED";
-        RequestDataService.cancel(this.requestToUpdate._id, this.requestToUpdate)
+        RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
         .then(response => {
             console.log(response.data);
             this.refreshList();

@@ -102,8 +102,7 @@ export default {
         bookAuthor: this.request.bookAuthor,
         bookDescription: this.request.bookDescription,
         bookGenre: this.request.bookGenre,
-        requestStatus: "PROCESSING",
-        readyForPurchase: this.readyForPurchase
+        requestStatus: "PROCESSING"
       };
 
       RequestDataService.updateRequest(this.$route.params.id ,data)

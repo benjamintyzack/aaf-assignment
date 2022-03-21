@@ -49,7 +49,7 @@ exports.findAll = ( async (req, res) => {
             });
 });
 
-// Retrieve all Requests from the database.
+// Retrieve a Requests from the database.
 exports.getRequest = ( async (req, res) => {
     const id = req.params.id;
 
@@ -66,7 +66,6 @@ exports.getRequest = ( async (req, res) => {
 // Retrieve all Requests for a User.
 exports.usersRequests = ( async (req, res) => {
     const requestedUserID = req.params.id;
-    console.log(req.user);
     //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
     var condition = requestedUserID ? { requestedUserID: { $regex: new RegExp(requestedUserID), $options: "i" } } : {};
     await Request
@@ -94,8 +93,8 @@ exports.getAssignedRequests = ( async (req, res) => {
             });
 });
 
-// Retrieve all Requests that are unassigned.
-exports.getUnassignedRequests = ( async (req, res) => {
+// Retrieve all Unassigned Requests.
+exports.getRequests = ( async (req, res) => {
     //Query to get all the unassigned requests
     var condition = { isAssigned : false };
     Request
@@ -132,7 +131,8 @@ exports.updateRequest = ( async (req, res) => {
 
     const id = req.params.id;
 
-    await Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    if(req.user.isAdmin || req.user.isEmployee) {
+        await Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
             .then(data => {
                 if (!data) {
                     res.status(404).send({ message: `Cannot update Request with id=${id}. Maybe Request was not found!` });
@@ -142,6 +142,28 @@ exports.updateRequest = ( async (req, res) => {
             .catch(err => {
                 res.status(500).send({ message: err.message || "Error updating Request with id=" + id });
             });
+    }
+    else {
+        const request = await Request.findById(id);
+
+        if(request.requestedUserID == req.user.id) {
+            delete req.body.isAssigned;
+            delete req.body.approved;
+            delete req.body.needsMoreDetail;
+            delete req.body.needsApproval;
+        }
+
+        await Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+            .then(data => {
+                if (!data) {
+                    res.status(404).send({ message: `Cannot update Request with id=${id}. Maybe Request was not found!` });
+                } else
+                    res.status(200).send({ message: "Request was Updated Successfully." });
+            })
+            .catch(err => {
+                res.status(500).send({ message: err.message || "Error updating Request with id=" + id });
+            });
+    }
 });
 
 // Delete a Request with the specified id in the request

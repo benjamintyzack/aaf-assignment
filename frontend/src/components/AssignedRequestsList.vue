@@ -132,7 +132,7 @@ export default {
       this.requestToUpdate.requestStatus = "NEEDS APPROVAL";
       this.requestToUpdate.needsApproval = true;
 
-      RequestDataService.requestApproval(this.requestToUpdate._id, this.requestToUpdate)
+      RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
           this.refreshList;
@@ -148,7 +148,7 @@ export default {
       this.requestToUpdate.requestStatus = "SUSPENDED";
       this.requestToUpdate.needsMoreDetail = true;
 
-      RequestDataService.requestMoreDetail(this.requestToUpdate._id, this.requestToUpdate)
+      RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
           this.refreshList;
@@ -162,7 +162,7 @@ export default {
       this.requestToUpdate = request;
       this.requestToUpdate.requestStatus = "PURCHASED";
 
-      RequestDataService.purchase(this.requestToUpdate._id, this.requestToUpdate)
+      RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
           this.refreshList;

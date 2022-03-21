@@ -9,59 +9,28 @@ class RequestDataService {
     }
 
     getRequest(id) {
-        return http.get(`/request/${id}`);
-    }
-
-    getAll() {
-        return http.get("/requests");
+        return http.get(`/requests/${id}`);
     }
 
     getUnassignedRequests() {
-        return http.get('/requests/unassigned');
+        return http.get("/requests");
     }
     
     getRequestsToApprove() {
-        return http.get('/requests/approval');
+        return http.get('/requests/admin');
     }
     
     getUsersRequests(id) {
-        return http.get(`/requests/${id}`);
+        return http.get(`/requests/user/${id}`);
+    }
+
+    
+    getAssignedRequests(id) {
+        return http.get(`/requests/employee/${id}`);
     }
 
     updateRequest(id, data) {
         return http.put(`requests/${id}`, data);
-    }
-
-    getAssignedRequests(id) {
-        return http.get(`/requests/${id}/assigned`);
-    }
-
-    allocate(id, data) {
-        return http.put(`/requests/${id}/allocate`, data);
-    }
-
-    purchase(id, data) {
-        return http.put(`/requests/${id}/purchase`, data);
-    }
-
-    cancel(id, data) {
-        return http.put(`/requests/${id}/cancel`, data);
-    }
-
-    requestApproval(id, data) {
-        return http.put(`/requests/${id}/request-approval`, data);
-    }
-
-    requestMoreDetail(id, data) {
-        return http.put(`/requests/${id}/request-detail`, data);
-    }
-
-    approvePurchase(id, data) {
-        return http.put(`/requests/${id}/approved`, data);
-    }
-
-    declinePurchase(id, data) {
-        return http.put(`/requests/${id}/declined`, data);
     }
 
     deleteRequest(id) {

@@ -104,7 +104,7 @@ export default {
       this.requestToUpdate.requestStatus = "PURCHASED";
       this.requestToUpdate.approved = true;
 
-      RequestDataService.approvePurchase(this.requestToUpdate._id, this.requestToUpdate)
+      RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
           this.refreshList;
@@ -119,7 +119,7 @@ export default {
       this.requestToUpdate = request;
       this.requestToUpdate.requestStatus = "DECLINED";
 
-      RequestDataService.declinePurchase(this.requestToUpdate._id, this.requestToUpdate)
+      RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
           this.refreshList;
