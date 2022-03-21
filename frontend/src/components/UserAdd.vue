@@ -28,11 +28,8 @@
           />
       </div>
       <button @click="saveUser" class="btn btn-success">Submit</button>
-      <p>{{ message }}</p>
-    </div>
-    <div v-else>
-      <h4>You submitted successfully!</h4>
-      <button class="btn btn-success" @click="newUser">Add</button>
+      <p class="alert-success">{{ message }}</p>
+      <p class="alert-danger"> {{errMsg}} </p>
     </div>
   </div>
 </template>
@@ -50,8 +47,8 @@ export default {
         password: '',
         isEmployee: false
       },
-      submitted: false,
-      message: ''
+      message: '',
+      errMsg: ''
     };
   },
   methods: {
@@ -65,19 +62,14 @@ export default {
       UserDataService.create(data)
           .then(response => {
             this.user._id = response.data._id;
+            this.user = {};
             console.log(response.data);
             this.message = response.data;
-            // this.submitted = true;
           })
           .catch(e => {
             console.log(e);
-            this.message = e.response.data;
+            this.errMsg = e.response.data;
           });
-    },
-
-    newUser() {
-      this.submitted = false;
-      this.user = {};
     }
   }
 };

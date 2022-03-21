@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const { authjwt } = require("../middlewares");
 const {adminCheck} = require("../middlewares");
+const {verifySignUp} = require("../middlewares")
  
 //Require controller
 var userController = require('../controllers/user.controller');
@@ -20,7 +21,7 @@ router.get("/users/", [authjwt.verifyToken], [adminCheck.verifyAdmin], userContr
 router.get("/users/:id", [authjwt.verifyToken], [adminCheck.verifyAdmin], userController.findOne);
  
 // Update a user with id
-router.put("/users/:id", [authjwt.verifyToken], [adminCheck.verifyAdmin], userController.update);
+router.put("/users/:id", [authjwt.verifyToken], [adminCheck.verifyAdmin], [verifySignUp.checkDuplicateUsername], userController.update);
  
 // Delete a user with id
 router.delete("/users/:id", [authjwt.verifyToken], [adminCheck.verifyAdmin], userController.delete);

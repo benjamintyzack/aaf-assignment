@@ -1,0 +1,1207 @@
+{
+	"info": {
+		"_postman_id": "9de84280-c182-4643-a92b-5db2c11d607f",
+		"name": "BookStore- Negative API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "No Password Register Test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.badRequest;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error Message Received\", function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Missing fields from request\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"{{username}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No Username Register Test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.badRequest;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error Message Received\", function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Missing fields from request\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"password\": \"{{password}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Username already exist Test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.badRequest;\r",
+							"    pm.response.to.be.withBody;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error Message Received\", function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Failed! Username is already in use!\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"client\",\r\n  \"password\": \"{{password}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registering a Client User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonBody = pm.response.json();\r",
+							"pm.collectionVariables.set(\"userId\", jsonBody.id);\r",
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Contains new user data\", function() {\r",
+							"    pm.expect(jsonBody).have.property('username');\r",
+							"    pm.expect(jsonBody).have.property('isEmployee', false);\r",
+							"    pm.expect(jsonBody).have.property('isAdmin', false);\r",
+							"    pm.expect(jsonBody).have.property('id');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"{{password}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unauthorised attempt at Creating book request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(403);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.forbidden;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error Message Received\", function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"No token provided!\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookName\": \"{{bookName}}\",\r\n    \"bookPrice\": \"{{bookPrice}}\",\r\n    \"bookAuthor\": \"{{bookAuthor}}\",\r\n    \"bookDescription\": \"{{bookDescription}}\",\r\n    \"bookGenre\": \"{{bookGenre}}\",\r\n    \"requestedUserID\": \"{{userId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/requests/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"requests",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User not found Test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.notFound;\r",
+							"    pm.response.to.be.withBody; \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error Message Received\", function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"User Not found.\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"FooBar\",\r\n  \"password\": \"{{password}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login as Client User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonBody = pm.response.json();\r",
+							"pm.collectionVariables.set(\"userId\", jsonBody.id);\r",
+							"pm.collectionVariables.set(\"token\", jsonBody.accessToken);\r",
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Contains Valid User Information\", function() {\r",
+							"    pm.expect(jsonBody).have.property('id', pm.collectionVariables.get(\"userId\"));\r",
+							"    pm.expect(jsonBody).have.property('username', pm.collectionVariables.get('username'));\r",
+							"    pm.expect(jsonBody).have.property('isEmployee', false);\r",
+							"    pm.expect(jsonBody).have.property('isAdmin', false);\r",
+							"    pm.expect(jsonBody).have.property('accessToken');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"{{password}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Book Request as Client",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonBody = pm.response.json();\r",
+							"pm.collectionVariables.set(\"bookId\", jsonBody._id);\r",
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Contains expected book request data\", function() {\r",
+							"    pm.expect(jsonBody).have.property('bookName', pm.collectionVariables.get('bookName'));\r",
+							"    pm.expect(jsonBody).have.property('bookDescription', pm.collectionVariables.get('bookDescription'));\r",
+							"    pm.expect(jsonBody).have.property('bookGenre', pm.collectionVariables.get('bookGenre'));\r",
+							"    pm.expect(jsonBody).have.property('bookPrice', pm.collectionVariables.get('bookPrice'));\r",
+							"    pm.expect(jsonBody).have.property('bookAuthor', pm.collectionVariables.get('bookAuthor'));\r",
+							"    pm.expect(jsonBody).have.property('dateCreated');\r",
+							"    pm.expect(jsonBody).have.property('requestedUserID');\r",
+							"    pm.expect(jsonBody).have.property('requestStatus', 'QUEUED');\r",
+							"    pm.expect(jsonBody).have.property('employeeAssignedID', '');\r",
+							"    pm.expect(jsonBody).have.property('needsMoreDetail', false);\r",
+							"    pm.expect(jsonBody).have.property('needsApproval', false);\r",
+							"    pm.expect(jsonBody).have.property('approved', false);\r",
+							"    pm.expect(jsonBody).have.property('_id');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookName\": \"{{bookName}}\",\r\n    \"bookPrice\": \"{{bookPrice}}\",\r\n    \"bookAuthor\": \"{{bookAuthor}}\",\r\n    \"bookDescription\": \"{{bookDescription}}\",\r\n    \"bookGenre\": \"{{bookGenre}}\",\r\n    \"requestedUserID\": \"{{userId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/requests/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"requests",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Attempting to update Request that doesn't exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.notFound;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Contains Valid User Information\", function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Cannot update Request. Maybe Request was not found!\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"needsMoreDetail\": true,\r\n    \"bookGenre\": \"Fiction\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/requests/123456789",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"requests",
+						"123456789"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Attempting to GET a request that doesn't exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.notFound;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Contains expected book request data\", function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Request not found!\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3050/bookstore//requests/1234325",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"",
+						"requests",
+						"1234325"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Attempting to GET a list of assigned requests as a Client",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.unauthorized;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Contains expected book request data\", function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Not Authorised For This Request, Employee needed\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3050/bookstore//requests/employee/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"",
+						"requests",
+						"employee",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client User attempts to GET a list of Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.unauthorized;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    \r",
+							"});\r",
+							"pm.test(\"Check each list item for proper structure\", function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Not Authorised For This Request, Admin needed\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3050/bookstore//users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Attempting to DELETE a request that doesn't exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Book Request Not Found Test\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.notFound;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Invalid Token Message\" , function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Request was not found!\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3050/bookstore//requests/74394612",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"",
+						"requests",
+						"74394612"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin User gets list of Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonBody = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    \r",
+							"});\r",
+							"pm.test(\"Check each list item for proper structure\", function() {\r",
+							"    \r",
+							"    for (i = 0; i < jsonBody.length; i++) {\r",
+							"        pm.expect(jsonBody[i]).have.property('username');\r",
+							"        pm.expect(jsonBody[i]).have.property('isEmployee');\r",
+							"        pm.expect(jsonBody[i]).have.property('isAdmin');\r",
+							"        pm.expect(jsonBody[i]).have.property('dateCreated');\r",
+							"        pm.expect(jsonBody[i]).have.property('_id');\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check List for the new user\", function() {\r",
+							"    \r",
+							"    for (i = 0; i < jsonBody.length; i++) {\r",
+							"        if(jsonBody[i].username == 'client1'){\r",
+							"            pm.expect(jsonBody[i]).have.property('isEmployee', false);\r",
+							"            pm.expect(jsonBody[i]).have.property('isAdmin', false);\r",
+							"            pm.expect(jsonBody[i]).have.property('_id', pm.collectionVariables.get('userId'))\r",
+							"\r",
+							"        }\r",
+							"        \r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3050/bookstore//users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin User GETs new User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonBody = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    \r",
+							"});\r",
+							"pm.test(\"Check each list item for proper structure\", function() {\r",
+							"    pm.expect(jsonBody).have.property('username');\r",
+							"    pm.expect(jsonBody).have.property('isEmployee');\r",
+							"    pm.expect(jsonBody).have.property('isAdmin');\r",
+							"    pm.expect(jsonBody).have.property('_id');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3050/bookstore//users/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Attempting to DELETE a user as a Client",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.unauthorized;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Unauthorised Message Returned\" , function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Not Authorised For This Request, Admin needed\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-access-token",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3050/bookstore/users/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login as Admin User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonBody = pm.response.json();\r",
+							"pm.collectionVariables.set(\"adminId\", jsonBody.id);\r",
+							"pm.collectionVariables.set(\"token\", jsonBody.accessToken);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Contains Valid User Information\", function() {\r",
+							"    pm.expect(jsonBody).have.property('username', pm.collectionVariables.get('adminUsername'));\r",
+							"    pm.expect(jsonBody).have.property('isEmployee', false);\r",
+							"    pm.expect(jsonBody).have.property('isAdmin', true);\r",
+							"    pm.expect(jsonBody).have.property('id');\r",
+							"    pm.expect(jsonBody).have.property('accessToken');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{adminUsername}}\",\r\n    \"password\": \"{{adminPassword}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin attempts to UPDATE a user that doesn't exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response format JSON test\", function () {\r",
+							"    pm.response.to.be.notFound;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"User doesn't exist\" , function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Error, this User doesn't exist!\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"client2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3050/bookstore//users/21445464",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"",
+						"users",
+						"21445464"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successful Deletion of a Book Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Book Request Successfully Deleted\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3050/bookstore//requests/{{bookId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"",
+						"requests",
+						"{{bookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deleting a Client User Account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User Successfully Deleted\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3050/bookstore/users/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3050",
+					"path": [
+						"bookstore",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": "client1"
+		},
+		{
+			"key": "password",
+			"value": "password"
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "employeeUsername",
+			"value": "employee1"
+		},
+		{
+			"key": "employeePassword",
+			"value": "password"
+		},
+		{
+			"key": "employeeId",
+			"value": ""
+		},
+		{
+			"key": "adminUsername",
+			"value": "admin"
+		},
+		{
+			"key": "adminPassword",
+			"value": "password"
+		},
+		{
+			"key": "adminId",
+			"value": ""
+		},
+		{
+			"key": "bookName",
+			"value": "A large Book"
+		},
+		{
+			"key": "bookPrice",
+			"value": "11.00"
+		},
+		{
+			"key": "bookAuthor",
+			"value": "Jerry"
+		},
+		{
+			"key": "bookDescription",
+			"value": "A large book of Knowledge"
+		},
+		{
+			"key": "bookGenre",
+			"value": ""
+		},
+		{
+			"key": "bookId",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

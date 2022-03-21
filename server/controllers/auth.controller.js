@@ -6,6 +6,15 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = ( async (req, res) => {
+
+  // Get user input
+  const { username, password } = req.body;
+
+  // Validate user input
+  if (!(username && password)) {
+    return res.status(400).send("Missing fields from request");
+  }
+
   const user = new User({
     username: req.body.username,
     password: bcrypt.hashSync(req.body.password, 8),
@@ -17,7 +26,12 @@ exports.signup = ( async (req, res) => {
       .save()
       .then(data => {
           console.log("Signup User saved in the database");
-          res.send({ message: "User was registered successfully!" });
+          res.send({
+            id: data._id,
+            username: data.username,
+            isEmployee: data.isEmployee,
+            isAdmin: data.isAdmin,
+            message: "User was registered successfully!" });
       })
       .catch(err => {
           res.status(500).send({ 

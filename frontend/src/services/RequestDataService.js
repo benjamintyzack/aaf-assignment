@@ -17,7 +17,7 @@ class RequestDataService {
     }
     
     getRequestsToApprove() {
-        return http.get('/requests/admin');
+        return http.get('/requests/admin/requests');
     }
     
     getUsersRequests(id) {

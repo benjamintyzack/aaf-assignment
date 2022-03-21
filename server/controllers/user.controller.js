@@ -49,6 +49,7 @@ exports.findAll = (async (req, res) => {
     var condition = username ? { username: { $regex: new RegExp(username), $options: "i" } } : {};
     await User
             .find(condition)
+            .select("-password")
             .then(data => {
                 res.status(200).send(data);
             })
@@ -62,6 +63,7 @@ exports.findOne = ( async (req, res) => {
     const id = req.params.id;
 
     await User.findById(id)
+            .select("-password")
             .then(data => {
                 if (!data)
                     res.status(404).send({ message: "Not found User with id: " + id});
@@ -81,44 +83,36 @@ exports.update = ( async (req, res) => {
 
     const id = req.params.id;
 
-    await User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-            .then(data => {
-                if (!data) {
-                    res.status(404).send({
-                        message: `Cannot update User with id=${id}. Maybe User was not found!`
-                    });
-                } else
-                    res.status(200).send({ message: "User was updated successfully." });
-            })
-            .catch(err => {
-                res.status(500).send({ message: err.message || "Error updating User with id=" + id });
-            });
+    try {
+		await User.findOneAndUpdate({ _id: id }, req.body);
+		user = await User.findOne({ _id: id }).select("-password");
+		return res.status(200).send(user);
+	} catch (error) {
+		if(error.message.includes("duplicate key error")) {
+			return res.status(409).send("Username is Already in use!");
+		}
+		return res.status(404).send("Error, this User doesn't exist!");
+	}
 });
  
 // Delete a User with the specified id in the request
 exports.delete = ( async (req, res) => {
     const id = req.params.id;
 
-    await User.findByIdAndRemove(id)
-            .then(data => {
-                if (!data) {
-                    res.status(404).send({ message: `Cannot delete User with id=${id}. Maybe User was not found!` });
-                } else {
-                    res.status(200).send({ message: "User was deleted successfully!" });
-                }
-            })
-            .catch(err => {
-                res.status(500).send({ message: err.message || "Could not delete User with id=" + id });
-            });
+    try {
+		await User.findByIdAndRemove({ _id: id })
+		return res.status(204).send("Successfully deleted user");
+	} catch {
+		return res.status(404).send("This User doesn't exist!")
+	}
 });
  
 // Delete all Users from the database.
 exports.deleteAll = ( async (req, res) => {
-    await User.deleteMany({})
-        .then(data => {
-            res.status(200).send({ message: `${data.deletedCount} Users were deleted successfully!` });
-        })
-        .catch(err => {
-            res.status(500).send({ message: err.message || "Some error occurred while removing all users." });
-        });
+    try {
+		await User.deleteMany({})
+		return res.status(204).send("Successfully deleted all users");
+	} catch {
+		return res.status(404).send("Problem with deleting Users")
+	}
 });

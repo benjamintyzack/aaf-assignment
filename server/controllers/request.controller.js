@@ -35,6 +35,7 @@ exports.create = ( async (req, res) => {
 });
 
 // Retrieve all Requests from the database.
+// Not currently used by the frontend but has been Implemented for potential future use
 exports.findAll = ( async (req, res) => {
     const bookName = req.query.bookName;
     //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
@@ -53,132 +54,97 @@ exports.findAll = ( async (req, res) => {
 exports.getRequest = ( async (req, res) => {
     const id = req.params.id;
 
-    await Request
-            .findById(id)
-            .then(data => {
-                res.status(200).send(data);
-            })
-            .catch(err => {
-                res.status(500).send({ message: err.message || "Some error occurred while retrieving Request." });
-            });
+    try {
+		const request = await Request.findOne({ _id: id });
+		console.log(request);
+		if (request === null) return res.status(404).send({message: 'Request not found!'});
+		return res.status(200).send(request);
+	} catch (error){
+		if (error.message.includes('Cast to ObjectId failed for value')) return res.status(404).send('Request not found!');
+		return res.status(500).send({ error: "Unable to retrieve book request" , message: error.message });
+	}
 });
 
 // Retrieve all Requests for a User.
 exports.usersRequests = ( async (req, res) => {
-    const requestedUserID = req.params.id;
-    //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
-    var condition = requestedUserID ? { requestedUserID: { $regex: new RegExp(requestedUserID), $options: "i" } } : {};
-    await Request
-            .find(condition)
-            .then(data => {
-                res.status(200).send(data);
-            })
-            .catch(err => {
-                res.status(500).send({ message: err.message || "Some error occurred while retrieving Requests." });
-            });
+    try {
+		const requests = await Request.find({ requestedUserID: req.params.id });
+		return res.status(200).send(requests);
+	} catch (error) {
+		if (error.message.includes('Cast to ObjectId failed for value')) return res.status(404).send('Requests not Found!');
+		return res.status(404).send({ error: "Unable to retrieve users book requests", message: error.message });
+	}
 });
 
 // Retrieve all Requests that are assigned to the current user.
 exports.getAssignedRequests = ( async (req, res) => {
-    const employeeAssignedID = req.params.id;
-    //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
-    var condition = employeeAssignedID ? { employeeAssignedID: { $regex: new RegExp(employeeAssignedID), $options: "i" } } : {};
-    await Request
-            .find(condition)
-            .then(data => {
-                res.status(200).send(data);
-            })
-            .catch(err => {
-                res.status(500).send({ message: err.message || "Some error occurred while retrieving Requests." });
-            });
+    try {
+		const requests = await Request.find({ employeeAssignedID: req.params.id });
+		return res.status(200).send(requests);
+	} catch (error) {
+		if (error.message.includes('Cast to ObjectId failed for value')) return res.status(404).send('Requests not Found!');
+		return res.status(404).send({ error: "Unable to retrieve users book requests", message: error.message });
+	}
 });
 
 // Retrieve all Unassigned Requests.
 exports.getRequests = ( async (req, res) => {
-    //Query to get all the unassigned requests
-    var condition = { isAssigned : false };
-    Request
-        .find(condition)
-        .then(data => {
-            res.status(200).send(data);
-        })
-        .catch(err => {
-            res.status(500).send({ message: err.message || "Some error occurred while retrieving Requests." });
-        });
+    try {
+		const requests = await Request.find({ isAssigned: false });
+		return res.status(200).send(requests);
+	} catch (error) {
+		if (error.message.includes('Cast to ObjectId failed for value')) return res.status(404).send('Requests not Found!');
+		return res.status(404).send({ error: "Unable to retrieve users book requests", message: error.message });
+	}
 });
 
 // Retrieve all Requests that need to be approved.
 exports.getRequestsToApprove = ( async (req, res) => {
-    //We use req.query.bookName to get query string from the Request and consider it as condition for findAll() method.
-    var condition = { requestStatus : "NEEDS APPROVAL" };
-    await Request
-            .find(condition)
-            .then(data => {
-                res.status(200).send(data);
-            })
-            .catch(err => {
-                res.status(500).send({ message: err.message || "Some error occurred while retrieving Requests." });
-            });
+    try {
+		const requests = await Request.find({ requestStatus : 'NEEDS APPROVAL' });
+		return res.status(200).send(requests);
+	} catch (error) {
+		if (error.message.includes('Cast to ObjectId failed for value')) return res.status(404).send('Requests not Found!');
+		return res.status(404).send({ error: "Unable to retrieve users book requests", message: error.message });
+	}
 });
 
 // Updates Request
 exports.updateRequest = ( async (req, res) => {
-    if (!req.body) {
-        return res.status(400).send({
-            message: "Data to update can not be empty!"
-        });
-    }
+    try{
+		if (req.user.isAdmin || req.user.isEmployee){
+			await Request.findOneAndUpdate({ _id: req.params.id }, req.body)
+			return res.status(200).send( { message: "Successfully amended book request"});
+		} else {
+			const book = await Request.findOne({ _id: req.params.id});
+			if (book.requestedUserID == req.user.id){
+				delete req.body.isAssigned;
+				delete req.body.needsApproval;
+				if (req.body.needsMoreDetail == true) delete req.body.needsMoreDetail;
+				delete req.body.approved;
 
-    const id = req.params.id;
-
-    if(req.user.isAdmin || req.user.isEmployee) {
-        await Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-            .then(data => {
-                if (!data) {
-                    res.status(404).send({ message: `Cannot update Request with id=${id}. Maybe Request was not found!` });
-                } else
-                    res.status(200).send({ message: "Request was Updated Successfully." });
-            })
-            .catch(err => {
-                res.status(500).send({ message: err.message || "Error updating Request with id=" + id });
-            });
-    }
-    else {
-        const request = await Request.findById(id);
-
-        if(request.requestedUserID == req.user.id) {
-            delete req.body.isAssigned;
-            delete req.body.approved;
-            delete req.body.needsMoreDetail;
-            delete req.body.needsApproval;
-        }
-
-        await Request.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-            .then(data => {
-                if (!data) {
-                    res.status(404).send({ message: `Cannot update Request with id=${id}. Maybe Request was not found!` });
-                } else
-                    res.status(200).send({ message: "Request was Updated Successfully." });
-            })
-            .catch(err => {
-                res.status(500).send({ message: err.message || "Error updating Request with id=" + id });
-            });
-    }
+				
+				await Request.findOneAndUpdate({ _id: req.params.id }, req.body);
+				const updatedBook = await Request.findOne({ _id: req.params.id});
+				res.status(200).send( { message: "Request was Updated Successfully.", updatedRequest: updatedBook});
+			}
+		}
+		
+	} catch (error) {
+		if (error.message.includes('Cast to ObjectId failed for value')) return res.status(404).send('Cannot update Request. Maybe Request was not found!');
+		return res.status(500).send({error: "Error occured when trying to update book request", message: error.message});
+	}
 });
 
 // Delete a Request with the specified id in the request
 exports.delete = ( async (req, res) => {
     const id = req.params.id;
 
-    await Request.findByIdAndRemove(id)
-            .then(data => {
-                if (!data) {
-                    res.status(404).send({ message: `Cannot delete Request with id=${id}. Maybe Request was not found!` });
-                } else {
-                    res.status(200).send({ message: "Request was deleted successfully!" });
-                }
-            })
-            .catch(err => {
-                res.status(500).send({ message: err.message || "Could not delete Request with id=" + id });
-            });
+    try {
+		await Request.findByIdAndRemove({ _id: id })
+		return res.status(204).send( { message: "Successfully Deleted Book Request"});
+	} catch (error) {
+		if (error.message.includes('Cast to ObjectId failed for value')) return res.status(404).send('Request was not found!');
+		return res.status(500).send({ error: "Unable to delete book request", message: error.message });
+	}
 });

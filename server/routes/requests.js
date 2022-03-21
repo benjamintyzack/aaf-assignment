@@ -15,7 +15,7 @@ router.get("/requests/:id", [authjwt.verifyToken], requestController.getRequest)
 
 router.get("/requests/", [authjwt.verifyToken], [employeeCheck.verifyEmployee], requestController.getRequests);
 
-router.get("/requests/admin", [authjwt.verifyToken], [adminCheck.verifyAdmin], requestController.getRequestsToApprove);
+router.get("/requests/admin/requests", [authjwt.verifyToken], [adminCheck.verifyAdmin], requestController.getRequestsToApprove);
 
 // Retrieve requests for current user
 router.get("/requests/user/:id", [authjwt.verifyToken], requestController.usersRequests);

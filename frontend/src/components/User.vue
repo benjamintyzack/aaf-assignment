@@ -39,7 +39,8 @@
     >
       Update
     </button>
-    <p role="alert">{{ message }}</p>
+    <p role="alert-success">{{ message }}</p>
+    <p role="alert-danger">{{ errMsg }}</p>
   </div>
 
   <div v-else>
@@ -56,7 +57,8 @@ export default {
   data() {
     return {
       currentUser: null,
-      message: ''
+      message: '',
+      errMsg: ''
     };
   },
   methods: {
@@ -75,10 +77,10 @@ export default {
       UserDataService.update(this.currentUser._id, this.currentUser)
           .then(response => {
             console.log(response.data);
-            this.message = response.data;
+            this.message = "User updated Successfully!";
           })
           .catch(e => {
-            this.message = e.response.message;
+            this.errMsg = e.response.message;
             console.log(e);
           });
     },

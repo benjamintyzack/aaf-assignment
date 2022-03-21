@@ -46,6 +46,10 @@
                 Cancel Request
             </button>
         </div>
+        <div>
+          <p class="alert-success"> {{message}} </p>
+          <p class="alert-danger"> {{errMsg}} </p>
+        </div>
       </div>
       <div v-else>
         <br />
@@ -65,7 +69,9 @@ export default {
       requests: [],
       selectedRequest: null,
       currentIndex: -1,
-      requestToUpdate: null
+      requestToUpdate: null,
+      message: '',
+      errMsg: ''
     };
   },
   computed: {
@@ -80,8 +86,10 @@ export default {
           .then(response => {
             this.requests = response.data;
             console.log(response.data);
+            this.message = response.message;
           })
           .catch(e => {
+            this.errMsg = e.message;
             console.log(e);
           });
     },

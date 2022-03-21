@@ -72,7 +72,6 @@ export default {
         bookGenre: ''
       },
       submitted: false,
-      readyForPurchase: false
     };
   },
   computed: {
