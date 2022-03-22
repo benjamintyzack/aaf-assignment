@@ -13,7 +13,7 @@
         />
         <label for="bookPrice">Book Price</label>
         <input
-            type="text"
+            type="number"
             class="form-control"
             id="bookPrice"
             required
