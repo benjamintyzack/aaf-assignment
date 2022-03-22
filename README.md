@@ -34,6 +34,11 @@ In a VS terminal cd to the server folder
 then type in: node depopulateDB.js
 
 To run Server:
+First create a file in server/config folder called "auth.config.js" and put the following code in:
+module.exports = {
+    secret: "bookstore-auth"
+}
+
 WITH DATABASE RUNNING
 USING VSCODE
 
