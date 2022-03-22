@@ -3,7 +3,7 @@ const Message = db.messages;
 
 module.exports.respond = async function(endpoint,socket){
     console.log("A user connected");
-    await Message.find().sort({'_id': -1}).limit(10)
+    await Message.find().sort({'_id': 1}).limit(10)
         .then(data => {
             socket.emit('history', data);
         })
