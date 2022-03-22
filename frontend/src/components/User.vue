@@ -39,8 +39,8 @@
     >
       Update
     </button>
-    <p role="alert-success">{{ message }}</p>
-    <p role="alert-danger">{{ errMsg }}</p>
+    <p class="alert-success">{{ message }}</p>
+    <p class="alert-danger">{{ errMsg }}</p>
   </div>
 
   <div v-else>
@@ -80,7 +80,7 @@ export default {
             this.message = "User updated Successfully!";
           })
           .catch(e => {
-            this.errMsg = e.response.message;
+            this.errMsg = e.response.data.message;
             console.log(e);
           });
     },
