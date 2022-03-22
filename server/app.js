@@ -68,7 +68,6 @@ app.use('/bookstore', usersRouter);
 app.use('/bookstore', requestsRouter);
 //routes for authentication
 require('./routes/auth')(app);
-require('./routes/test.routes.js')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
