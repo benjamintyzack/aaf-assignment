@@ -16,7 +16,7 @@
           <router-link to="/user-add" class="nav-link">Add Users</router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/approve-requests" class="nav-link">Approve Requests</router-link>
+          <router-link to="/approve" class="nav-link">Approve Requests</router-link>
         </li>
         </div>
         <div v-if="isEmployee" class="navbar-nav mr-auto">
@@ -24,15 +24,15 @@
             <router-link to="/requests" class="nav-link">Request List</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/assigned-requests" class="nav-link">Assigned Requests</router-link>
+            <router-link to="/assigned" class="nav-link">Assigned Requests</router-link>
           </li>
         </div>
         <div v-if="!isAdmin && !isEmployee" class="navbar-nav mr-auto">
           <li class="nav-item">
-              <router-link to="/add-requests" class="nav-link">Add Request</router-link>
+              <router-link to="/add/request" class="nav-link">Add Request</router-link>
           </li>
           <li class="nav-item">
-              <router-link to="/users-requests" class="nav-link">My Requests</router-link>
+              <router-link to="/requests/user" class="nav-link">My Requests</router-link>
           </li>
         </div>
       </div>

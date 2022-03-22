@@ -42,8 +42,8 @@ const router = new Router({
             component: Register
         },
         {
-            path: '/add-requests',
-            name: 'add-requests',
+            path: '/add/request',
+            name: 'add',
             component: () => import("./components/RequestAdd.vue")
         },
         {
@@ -52,22 +52,22 @@ const router = new Router({
             component: () => import("./components/RequestList.vue")
         },
         {
-            path: '/users-requests',
+            path: '/requests/user',
             name: 'users-requests',
             component: () => import("./components/UsersRequests.vue")
         },
         {
-            path: '/assigned-requests',
-            name: 'assigned-requests',
+            path: '/assigned',
+            name: 'assigned',
             component: () => import("./components/AssignedRequestsList.vue")
         },
         {
-            path: '/approve-requests',
-            name: 'approve-requests',
+            path: '/approve',
+            name: 'approve',
             component: () => import("./components/ApprovalList.vue")
         },
         {
-            path: '/update-request/:id',
+            path: '/update/request/:id',
             name: 'update-request',
             component: () => import("./components/UpdateRequest.vue")
         },

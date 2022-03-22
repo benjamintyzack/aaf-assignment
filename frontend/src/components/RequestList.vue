@@ -2,6 +2,10 @@
   <div class="list row">
     <div class="col-md-6">
       <h4>Request List</h4>
+      <div>
+          <p class="alert-success"> {{message}} </p>
+          <p class="alert-danger"> {{errMsg}} </p>
+      </div>
       <ul class="list-group">
         <li class="list-group-item"
             :class="{ active: index == currentIndex }"
@@ -67,7 +71,9 @@ export default {
       requests: [],
       selectedRequest: null,
       currentIndex: -1,
-      requestToUpdate: null
+      requestToUpdate: null,
+      message: '',
+      errMsg: ''
     };
   },
   computed: {
@@ -85,6 +91,7 @@ export default {
           })
           .catch(e => {
             console.log(e);
+            this.errMsg = (e.message || e.response.message);
           });
     },
 
@@ -120,6 +127,7 @@ export default {
           })
           .catch(e => {
             console.log(e);
+            this.errMsg = (e.message || e.response.message);
           });
     },
 
@@ -131,6 +139,7 @@ export default {
         })
         .catch(e => {
           console.log(e);
+          this.errMsg = (e.message || e.response.message);
         });
     }
   },

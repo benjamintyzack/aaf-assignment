@@ -2,6 +2,10 @@
   <div class="list row">
     <div class="col-md-6">
       <h4>Request List</h4>
+      <div>
+          <p class="alert-success"> {{message}} </p>
+          <p class="alert-danger"> {{errMsg}} </p>
+      </div>
       <ul class="list-group">
         <li class="list-group-item"
             :class="{ active: index == currentIndex }"
@@ -42,13 +46,9 @@
             <button v-if="needsMoreDetail(selectedRequest)" class="btn btn-success" @click="updateRequest(selectedRequest._id)">
                 Update Request
             </button>
-            <button v-if="!isAssigned(selectedRequest)" class="m-3 btn btn-sm btn-danger" @click="cancelRequest(selectedRequest)">
+            <button v-if="!isAssigned(selectedRequest) && selectedRequest.requestStatus != 'CANCELLED'" class="m-3 btn btn-sm btn-danger" @click="cancelRequest(selectedRequest)">
                 Cancel Request
             </button>
-        </div>
-        <div>
-          <p class="alert-success"> {{message}} </p>
-          <p class="alert-danger"> {{errMsg}} </p>
         </div>
       </div>
       <div v-else>
@@ -86,7 +86,6 @@ export default {
           .then(response => {
             this.requests = response.data;
             console.log(response.data);
-            this.message = response.message;
           })
           .catch(e => {
             this.errMsg = e.message;
@@ -127,10 +126,14 @@ export default {
         RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
         .then(response => {
             console.log(response.data);
+            this.message = response.data.message;
+            this.errMsg = '';
             this.refreshList();
           })
           .catch(e => {
             console.log(e);
+            this.message = '';
+            this.errMsg = (e.message || e.response.message);
           });
     },
   },

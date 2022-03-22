@@ -2,6 +2,10 @@
   <div class="list row">
     <div class="col-md-6">
       <h4>Request List</h4>
+      <div>
+          <p class="alert-success"> {{message}} </p>
+          <p class="alert-danger"> {{errMsg}} </p>
+      </div>
       <ul class="list-group">
         <li class="list-group-item"
             :class="{ active: index == currentIndex }"
@@ -67,7 +71,9 @@ export default {
       requests: [],
       selectedRequest: null,
       currentIndex: -1,
-      requestToUpdate: null
+      requestToUpdate: null,
+      message: '',
+      errMsg: ''
     };
   },
   computed: {
@@ -85,6 +91,8 @@ export default {
           })
           .catch(e => {
             console.log(e);
+            this.message = '';
+            this.errMsg = (e.message || e.response.message)
           });
     },
 
@@ -107,10 +115,14 @@ export default {
       RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
+          this.message = response.data.message;
+          this.errMsg = '';
           this.refreshList;
         })
         .catch(e => {
           console.log(e);
+          this.message = '';
+          this.errMsg = (e.message || e.response.message)
         });
 
     },
@@ -122,10 +134,14 @@ export default {
       RequestDataService.updateRequest(this.requestToUpdate._id, this.requestToUpdate)
       .then(response => {
           console.log(response.data);
+          this.message = response.data.message;
+          this.errMsg = '';
           this.refreshList;
         })
         .catch(e => {
           console.log(e);
+          this.message = '';
+          this.errMsg = (e.message || e.response.message)
         });
 
     },

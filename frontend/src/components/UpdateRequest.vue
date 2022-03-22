@@ -49,6 +49,7 @@
         />
       </div>
       <button class="btn btn-success" @click="updateRequest()">Submit</button>
+      <p> {{ errMsg }} </p>
     </div>
     <div v-else>
       <h4>Request updated successfully!</h4>
@@ -69,7 +70,8 @@ export default {
         bookPrice: '',
         bookAuthor: '',
         bookDescription: '',
-        bookGenre: ''
+        bookGenre: '',
+        errMsg: '',
       },
       submitted: false,
     };
@@ -88,6 +90,7 @@ export default {
           })
           .catch(e => {
             console.log(e);
+            this.errMsg = (e.message || e.response.message);
           });
     },
 
@@ -112,6 +115,7 @@ export default {
           })
           .catch(e => {
             console.log(e);
+            this.errMsg = (e.message || e.response.message);
             this.submitted = false;
           });
     }
